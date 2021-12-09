@@ -30,6 +30,14 @@ export const sampleBook3: BookType = {
   genre: "Sci-Fi",
 };
 
+export const sampleBook4: BookType = {
+  img: "",
+  title: "It",
+  author: "Bill Simmons",
+  pageCount: 324,
+  genre: "Sci-Fi",
+};
+
 export const sampleListOfBooks: BookType[] = [
   sampleBook,
   sampleBook2,
@@ -39,4 +47,5 @@ export const sampleListOfBooks: BookType[] = [
   sampleBook2,
   sampleBook,
   sampleBook2,
+  sampleBook4,
 ];

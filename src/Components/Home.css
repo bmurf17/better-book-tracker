@@ -6,7 +6,13 @@
 }
 
 .App-book {
+  padding-top: 10px;
+  padding-bottom: 7px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.App-padding {
+  padding-right: 10px;
 }
