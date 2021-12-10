@@ -15,6 +15,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import BookType from "../types/bookType";
 import { Delete } from "@mui/icons-material";
 import "./Home.css";
+import { db } from "../firebase.config";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 interface Props {
   open: boolean;
@@ -29,11 +31,23 @@ export function BookDialog(props: Props) {
   const [pageCount, setPageCount] = useState(book.pageCount);
   const [genre, setGenre] = useState(book.genre);
 
-  const handleClose = () => {
-    console.log("Title: " + title);
-    console.log("Author: " + author);
-    console.log("Page Count: " + pageCount);
-    console.log("Genre: " + genre);
+  const handleDelete = async () => {
+    const userDoc = doc(db, "books", book.id);
+    await deleteDoc(userDoc);
+    onClose();
+  };
+
+  const updateBook = async () => {
+    const newFields = {
+      title: title,
+      author: author,
+      pageCount: Number(pageCount),
+      genre: genre,
+    };
+    const userDoc = doc(db, "books", book.id);
+
+    await updateDoc(userDoc, newFields);
+
     onClose();
   };
 
@@ -190,7 +204,7 @@ export function BookDialog(props: Props) {
                   color="secondary"
                   startIcon={<Delete />}
                   onClick={() => {
-                    console.log("Delete");
+                    handleDelete();
                   }}
                 >
                   Delete
@@ -204,7 +218,7 @@ export function BookDialog(props: Props) {
         <Button
           autoFocus
           onClick={() => {
-            handleClose();
+            updateBook();
           }}
         >
           Save changes

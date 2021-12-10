@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import "./App.css";
-import BookType, { sampleListOfBooks } from "./types/bookType";
+import BookType from "./types/bookType";
 import { db } from "./firebase.config";
 import { Home } from "./Components/Home";
 import { Login } from "./Components/Login";
@@ -17,11 +17,13 @@ function App() {
       const data = await getDocs(bookCollectionRef);
       const temp: BookType[] = data.docs.map((doc) => {
         const book: BookType = {
+          id: doc.id,
           img: doc.data().img,
           title: doc.data().title,
           author: doc.data().author,
           pageCount: doc.data().pageCount,
           genre: doc.data().genre,
+          uid: doc.data().uid,
         };
         return book;
       });
@@ -29,7 +31,7 @@ function App() {
     };
 
     getBooks();
-  }, [setBooks]);
+  }, [bookCollectionRef]);
 
   return (
     <>
