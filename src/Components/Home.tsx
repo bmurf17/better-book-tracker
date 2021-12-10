@@ -1,6 +1,6 @@
 import { Grid, Box } from "@mui/material";
 import BookType from "../types/bookType";
-import { Book } from "./Book";
+import { BookCard } from "./BookCard";
 import "./Home.css";
 
 interface Props {
@@ -13,7 +13,7 @@ export function Home(props: Props) {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           {props.books.map((book) => {
-            return <Book book={book} />;
+            return <BookCard book={book} />;
           })}
         </Grid>
       </Box>
