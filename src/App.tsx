@@ -6,32 +6,61 @@ import { db } from "./firebase.config";
 import { Home } from "./Components/Home";
 import { Login } from "./Components/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 
 function App() {
   const [books, setBooks] = useState<BookType[]>([]);
-  const bookCollectionRef = collection(db, "books");
 
   useEffect(() => {
-    const getBooks = async () => {
-      const data = await getDocs(bookCollectionRef);
-      const temp: BookType[] = data.docs.map((doc) => {
-        const book: BookType = {
-          id: doc.id,
-          img: doc.data().img,
-          title: doc.data().title,
-          author: doc.data().author,
-          pageCount: doc.data().pageCount,
-          genre: doc.data().genre,
-          uid: doc.data().uid,
-        };
-        return book;
+    const loadBooks = async () => {
+      const data = collection(db, "books");
+
+      onSnapshot(data, async () => {
+        console.log("Here 2");
+        const theBooks = await getDocs(collection(db, "books"));
+        const temp: BookType[] = theBooks.docs.map((doc) => {
+          const book: BookType = {
+            id: doc.id,
+            img: doc.data().img,
+            title: doc.data().title,
+            author: doc.data().author,
+            pageCount: doc.data().pageCount,
+            genre: doc.data().genre,
+            uid: doc.data().uid,
+          };
+          return book;
+        });
+        setBooks(temp);
       });
-      setBooks(temp);
     };
 
-    getBooks();
-  }, [bookCollectionRef]);
+    loadBooks();
+  }, []);
+
+  // const booksRef = collection(db, "books");
+
+  // useEffect(() => {
+  //   const getBooks = async () => {
+  //     console.log("Here");
+  //     const data = await getDocs(collection(db, "books"));
+
+  //     const temp: BookType[] = data.docs.map((doc) => {
+  //       const book: BookType = {
+  //         id: doc.id,
+  //         img: doc.data().img,
+  //         title: doc.data().title,
+  //         author: doc.data().author,
+  //         pageCount: doc.data().pageCount,
+  //         genre: doc.data().genre,
+  //         uid: doc.data().uid,
+  //       };
+  //       return book;
+  //     });
+  //     setBooks(temp);
+  //   };
+
+  //   getBooks();
+  // }, [booksRef]);
 
   return (
     <>
