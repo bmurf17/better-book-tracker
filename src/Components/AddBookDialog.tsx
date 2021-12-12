@@ -15,6 +15,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./Home.css";
 import { db } from "../firebase.config";
 import { addDoc, collection } from "firebase/firestore";
+import { Delete } from "@mui/icons-material";
+import { getBook } from "../functions/googleBook";
 
 interface Props {
   open: boolean;
@@ -175,6 +177,25 @@ export function AddBookDialog(props: Props) {
                     setGenre(e.target.value);
                   }}
                 />
+              </Box>
+              <Box
+                display="flex"
+                style={{
+                  paddingTop: 6,
+                  paddingBottom: 6,
+                  paddingLeft: 12,
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  startIcon={<Delete />}
+                  onClick={() => {
+                    getBook(title, author);
+                  }}
+                >
+                  Fill Info
+                </Button>
               </Box>
             </Grid>
           </Grid>
