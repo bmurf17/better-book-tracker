@@ -15,8 +15,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./Home.css";
 import { db } from "../firebase.config";
 import { addDoc, collection } from "firebase/firestore";
-import { Delete } from "@mui/icons-material";
 import { getBook } from "../functions/googleBook";
+import SyncAltIcon from "@mui/icons-material/SyncAlt";
 
 interface Props {
   open: boolean;
@@ -29,10 +29,12 @@ export function AddBookDialog(props: Props) {
   const [author, setAuthor] = useState("");
   const [pageCount, setPageCount] = useState(0);
   const [genre, setGenre] = useState("");
+  const img = "https://m.media-amazon.com/images/I/618Duj4AwNL._SL1500_.jpg";
   const booksCollectionRef = collection(db, "books");
 
   const createBook = async () => {
     await addDoc(booksCollectionRef, {
+      img: img,
       title: title,
       author: author,
       pageCount: pageCount,
@@ -65,7 +67,7 @@ export function AddBookDialog(props: Props) {
           <Grid item>
             <img
               className="App-image"
-              src="https://m.media-amazon.com/images/I/618Duj4AwNL._SL1500_.jpg"
+              src={img}
               alt="Add a new book"
               width="250"
               height="350"
@@ -189,9 +191,14 @@ export function AddBookDialog(props: Props) {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  startIcon={<Delete />}
-                  onClick={() => {
-                    getBook(title, author);
+                  sx={{
+                    color: "#3f51b5",
+                    borderColor: "#3f51b5",
+                  }}
+                  startIcon={<SyncAltIcon />}
+                  onClick={async () => {
+                    await getBook(title, author);
+                    onClose();
                   }}
                 >
                   Fill Info

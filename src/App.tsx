@@ -16,7 +16,6 @@ function App() {
       const data = collection(db, "books");
 
       onSnapshot(data, async () => {
-        console.log("Here 2");
         const theBooks = await getDocs(collection(db, "books"));
         const temp: BookType[] = theBooks.docs.map((doc) => {
           const book: BookType = {

@@ -31,7 +31,7 @@ export function AddBookCard() {
                 component="img"
                 height="140"
                 image="https://secure.img1-fg.wfcdn.com/im/73052174/resize-h445%5Ecompr-r85/5678/56786400/Vintage+Book+ColorPak.jpg"
-                alt="green iguana"
+                alt="Add Book photo"
               />
               <CardContent className="App-addItem">
                 <Box
