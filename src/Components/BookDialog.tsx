@@ -14,7 +14,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import BookType from "../types/bookType";
 import { Delete } from "@mui/icons-material";
-import "./Home.css";
+import "./MyBooks.css";
 import { db } from "../firebase.config";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 

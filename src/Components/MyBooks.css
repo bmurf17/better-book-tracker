@@ -1,0 +1,22 @@
+.App-background {
+  background-color: #f0f8ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.App-book {
+  padding-top: 10px;
+  padding-bottom: 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.App-padding {
+  padding-right: 10px;
+}
+
+.App-image {
+  padding-right: 16px;
+}

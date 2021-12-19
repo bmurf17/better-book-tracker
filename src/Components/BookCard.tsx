@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import BookType from "../types/bookType";
 import { BookDialog } from "./BookDialog";
-import "./Home.css";
+import "./MyBooks.css";
 
 interface Props {
   book: BookType;
