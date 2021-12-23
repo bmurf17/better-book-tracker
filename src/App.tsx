@@ -9,9 +9,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { Home } from "./Components/Home";
 import { NavBar } from "./Components/NavBar";
+import { User } from "firebase/auth";
 
 function App() {
   const [books, setBooks] = useState<BookType[]>([]);
+
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const loadBooks = async () => {
@@ -43,7 +46,10 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={<Login user={user} setUser={setUser} />}
+          />
         </Routes>
 
         <Routes>
@@ -51,7 +57,7 @@ function App() {
         </Routes>
 
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home user={user} />} />
         </Routes>
       </BrowserRouter>
     </>

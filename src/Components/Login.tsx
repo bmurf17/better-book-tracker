@@ -20,13 +20,20 @@ import {
 import "./MyBooks.css";
 import { auth, provider } from "./../firebase.config";
 
-export function Login() {
+interface Props {
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
+
+export function Login(props: Props) {
   //state
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [user, setUser] = useState<User | null>(null);
+
+  const user = props.user;
+  const setUser = props.setUser;
 
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
@@ -155,7 +162,7 @@ export function Login() {
           Google
         </Button>
       </Box>
-      <p>{user?.uid}</p>
+      <p>{user?.displayName}</p>
     </div>
   );
 }
