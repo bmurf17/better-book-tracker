@@ -7,10 +7,15 @@ import {
   Grid,
   Box,
 } from "@mui/material";
+import { User } from "firebase/auth";
 import { useState } from "react";
 import { AddBookDialog } from "./AddBookDialog";
 
-export function AddBookCard() {
+interface Props {
+  user: User | null;
+}
+
+export function AddBookCard(props: Props) {
   const [open, setOpen] = useState(false);
 
   const onOpen = () => {
@@ -48,7 +53,7 @@ export function AddBookCard() {
         </div>
       </Grid>
 
-      <AddBookDialog open={open} onClose={onClose} />
+      <AddBookDialog open={open} onClose={onClose} user={props.user} />
     </>
   );
 }

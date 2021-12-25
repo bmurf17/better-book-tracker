@@ -1,9 +1,15 @@
+import { User } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase.config";
 const request = require("superagent");
 
-export async function getBook(title: string, author: string) {
+export async function getBook(
+  title: string,
+  author: string,
+  user: User | null
+) {
   const booksCollectionRef = collection(db, "books");
+
   const returnBook = {
     img: "",
     title: "",
@@ -20,7 +26,7 @@ export async function getBook(title: string, author: string) {
       inauthor: author,
     })
     .then((data: any) => {
-      console.log("Here: " + data.body.items[0].volumeInfo.pageCount);
+      console.log(data.body.items[0].volumeInfo.pageCount);
       returnBook.img = data.body.items[0].volumeInfo.imageLinks.thumbnail;
       returnBook.title = data.body.items[0].volumeInfo.title;
       returnBook.author = data.body.items[0]?.volumeInfo.authors[0];
@@ -36,7 +42,7 @@ export async function getBook(title: string, author: string) {
     author: returnBook.author,
     pageCount: returnBook.pageCount,
     genre: returnBook.genre,
-    uid: "3yfG8kNSVjNtAyz3wrLhMNTnwNp2",
+    uid: user?.uid,
   });
 
   return returnBook;

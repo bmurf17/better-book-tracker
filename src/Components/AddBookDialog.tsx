@@ -17,10 +17,12 @@ import { db } from "../firebase.config";
 import { addDoc, collection } from "firebase/firestore";
 import { getBook } from "../functions/googleBook";
 import SyncAltIcon from "@mui/icons-material/SyncAlt";
+import { User } from "firebase/auth";
 
 interface Props {
   open: boolean;
   onClose: () => void;
+  user: User | null;
 }
 
 export function AddBookDialog(props: Props) {
@@ -33,13 +35,14 @@ export function AddBookDialog(props: Props) {
   const booksCollectionRef = collection(db, "books");
 
   const createBook = async () => {
+    console.log("Here: " + props.user?.uid);
     await addDoc(booksCollectionRef, {
       img: img,
       title: title,
       author: author,
       pageCount: pageCount,
       genre: genre,
-      uid: "3yfG8kNSVjNtAyz3wrLhMNTnwNp2",
+      uid: props.user?.uid,
     });
     onClose();
   };
@@ -197,7 +200,7 @@ export function AddBookDialog(props: Props) {
                   }}
                   startIcon={<SyncAltIcon />}
                   onClick={async () => {
-                    await getBook(title, author);
+                    await getBook(title, author, props.user);
                     onClose();
                   }}
                 >
