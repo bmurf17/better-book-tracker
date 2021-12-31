@@ -56,7 +56,7 @@ function App() {
         setBooks(bookArray);
       }
 
-      if (!(books.length > 0)) {
+      if (books.length === 0 && !user?.uid) {
         onSnapshot(data, async () => {
           const theBooks = await getDocs(collection(db, "books"));
           const temp: BookType[] = theBooks.docs.map((doc) => {

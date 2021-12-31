@@ -1,4 +1,5 @@
 import { User } from "firebase/auth";
+import "./MyBooks.css";
 
 interface Props {
   user: User | null;
@@ -9,5 +10,9 @@ export function Home(props: Props) {
 
   const userName = user?.displayName;
 
-  return <>{userName ? <p>Welcome {userName}</p> : <p>Please log in</p>}</>;
+  return (
+    <div className="App-header">
+      {userName ? <p>Welcome {userName}</p> : <p>Please log in</p>}
+    </div>
+  );
 }

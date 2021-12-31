@@ -79,7 +79,35 @@ export function NavBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}></MenuItem>
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  {page === "Home" ? (
+                    <Link
+                      to={"/"}
+                      style={{
+                        textDecoration: "none",
+                        color: "blue",
+                        padding: 12,
+                      }}
+                    >
+                      <Typography variant="h5" color="inherit">
+                        Home
+                      </Typography>
+                    </Link>
+                  ) : (
+                    <Link
+                      to={"/" + page}
+                      style={{
+                        textDecoration: "none",
+                        color: "blue",
+                        padding: 12,
+                      }}
+                    >
+                      <Typography variant="h5" color="inherit">
+                        {page}
+                      </Typography>
+                    </Link>
+                  )}
+                </MenuItem>
               ))}
             </Menu>
           </Box>
