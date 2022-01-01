@@ -26,15 +26,12 @@ export async function getBook(
       inauthor: author,
     })
     .then((data: any) => {
-      console.log(data.body.items[0].volumeInfo.pageCount);
       returnBook.img = data.body.items[0].volumeInfo.imageLinks.thumbnail;
       returnBook.title = data.body.items[0].volumeInfo.title;
       returnBook.author = data.body.items[0]?.volumeInfo.authors[0];
       returnBook.pageCount = data.body.items[0].volumeInfo.pageCount;
       returnBook.genre = data.body.items[0].volumeInfo.categories[0];
     });
-
-  console.log(returnBook);
 
   await addDoc(booksCollectionRef, {
     img: returnBook.img,

@@ -35,7 +35,6 @@ export function AddBookDialog(props: Props) {
   const booksCollectionRef = collection(db, "books");
 
   const createBook = async () => {
-    console.log("Here: " + props.user?.uid);
     await addDoc(booksCollectionRef, {
       img: img,
       title: title,

@@ -1,4 +1,6 @@
+import { Typography } from "@mui/material";
 import { User } from "firebase/auth";
+import { Link } from "react-router-dom";
 import "./MyBooks.css";
 
 interface Props {
@@ -12,7 +14,20 @@ export function Home(props: Props) {
 
   return (
     <div className="App-header">
-      {userName ? <p>Welcome {userName}</p> : <p>Please log in</p>}
+      {userName ? (
+        <p>Welcome {userName}</p>
+      ) : (
+        <Link
+          to={"/login"}
+          style={{
+            textDecoration: "none",
+            color: "blue",
+            padding: 12,
+          }}
+        >
+          <Typography variant="h5">Please Sign In</Typography>
+        </Link>
+      )}
     </div>
   );
 }

@@ -52,11 +52,10 @@ function App() {
           index++;
         });
 
-        console.log(bookArray);
         setBooks(bookArray);
       }
 
-      if (books.length === 0 && !user?.uid) {
+      if (books.length === 0 && user === null) {
         onSnapshot(data, async () => {
           const theBooks = await getDocs(collection(db, "books"));
           const temp: BookType[] = theBooks.docs.map((doc) => {
@@ -74,15 +73,19 @@ function App() {
           setBooks(temp);
         });
       }
+
+      if (user === null) {
+        setBooks([]);
+      }
     };
 
     loadBooks();
-  }, [user?.uid, books.length]);
+  }, [user, books.length, user?.uid]);
 
   return (
     <>
       <BrowserRouter>
-        <NavBar />
+        <NavBar user={user} />
         <Routes>
           <Route
             path="/login"

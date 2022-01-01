@@ -1,4 +1,4 @@
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import { User } from "firebase/auth";
 import BookType from "../types/bookType";
 import { AddBookCard } from "./AddBookCard";
@@ -11,18 +11,23 @@ interface Props {
 }
 
 export function MyBooks(props: Props) {
+  const user = props.user;
   return (
     <div className="App-background">
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={4}>
-            <AddBookCard user={props.user} />
+      {user ? (
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+            <AddBookCard user={user} />
             {props.books.map((book) => {
               return <BookCard key={book.id} book={book} />;
             })}
           </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      ) : (
+        <div className="App-header">
+          <Typography variant="h5">Sign in to create your book list</Typography>
+        </div>
+      )}
     </div>
   );
 }

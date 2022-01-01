@@ -14,17 +14,30 @@ import {
 } from "@mui/material";
 import BookIcon from "@mui/icons-material/Book";
 import { Link } from "react-router-dom";
+import { signOut, User } from "firebase/auth";
+import { auth } from "./../firebase.config";
+
+interface Props {
+  user: User | null;
+}
 
 const pages = ["Home", "Books"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const logoutLinks = ["Logout"];
+const logInLinks = ["Login"];
 
-export function NavBar() {
+export function NavBar(props: Props) {
+  const user = props.user;
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const [profilePic, setProfilePic] = useState<string>(
+    "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png"
+  );
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -36,6 +49,11 @@ export function NavBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const logout = async () => {
+    await signOut(auth);
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -158,18 +176,14 @@ export function NavBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png"
-                />
+                <Avatar alt="Remy Sharp" src={profilePic} />
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: "top",
+                vertical: "bottom",
                 horizontal: "right",
               }}
               keepMounted
@@ -179,12 +193,52 @@ export function NavBar() {
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
+              sx={{
+                display: { xs: "block", md: "block" },
+              }}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              {user?.uid
+                ? logoutLinks.map((setting) => {
+                    if (setting === "Logout") {
+                      return (
+                        <MenuItem key={setting} onClick={logout}>
+                          <Typography textAlign="center">{setting}</Typography>
+                        </MenuItem>
+                      );
+                    } else {
+                      return (
+                        <MenuItem key={setting} onClick={handleCloseNavMenu}>
+                          <Typography textAlign="center">{setting}</Typography>
+                        </MenuItem>
+                      );
+                    }
+                  })
+                : logInLinks.map((setting) => {
+                    if (setting === "Login") {
+                      return (
+                        <MenuItem key={setting} onClick={logout}>
+                          <Link
+                            to={"/login"}
+                            style={{
+                              textDecoration: "none",
+                              color: "blue",
+                              padding: 12,
+                            }}
+                          >
+                            <Typography variant="h5" color="inherit">
+                              Login
+                            </Typography>
+                          </Link>
+                        </MenuItem>
+                      );
+                    } else {
+                      return (
+                        <MenuItem key={setting} onClick={handleCloseNavMenu}>
+                          <Typography textAlign="center">{setting}</Typography>
+                        </MenuItem>
+                      );
+                    }
+                  })}
             </Menu>
           </Box>
         </Toolbar>

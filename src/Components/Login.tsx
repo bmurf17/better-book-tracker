@@ -4,7 +4,6 @@ import GoogleIcon from "@mui/icons-material/Google";
 import {
   onAuthStateChanged,
   User,
-  signOut,
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
@@ -24,15 +23,11 @@ export function Login(props: Props) {
     setUser(currentUser);
   });
 
-  const logout = async () => {
-    await signOut(auth);
-  };
   const signInWithGoogle = async () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         // The signed-in user info.
         const user = result.user;
-        console.log(user);
         // ...
       })
       .catch((error) => {
@@ -66,9 +61,7 @@ export function Login(props: Props) {
         </Button>
       </Box>
       {user?.displayName ? (
-        <Button variant="contained" onClick={logout}>
-          Logout
-        </Button>
+        <Typography variant="body2">Welcome {user?.displayName}</Typography>
       ) : null}
     </div>
   );
