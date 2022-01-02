@@ -30,9 +30,9 @@ export function NavBar(props: Props) {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const [profilePic, setProfilePic] = useState<string>(
-    "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png"
-  );
+  if (user) {
+    console.log(user?.photoURL!);
+  }
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -176,7 +176,16 @@ export function NavBar(props: Props) {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src={profilePic} />
+                {user?.photoURL ? (
+                  <Avatar alt="Remy Sharp" src={user?.photoURL} />
+                ) : (
+                  <Avatar
+                    alt="Remy Sharp"
+                    src={
+                      "https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png"
+                    }
+                  />
+                )}
               </IconButton>
             </Tooltip>
             <Menu
