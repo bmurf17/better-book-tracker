@@ -12,6 +12,7 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
 } from "firebase/firestore";
 import { Home } from "./Components/Home";
 import { NavBar } from "./Components/NavBar";
@@ -27,37 +28,20 @@ function App() {
   });
 
   useEffect(() => {
+    var unsubscribe = () => {};
     const loadBooks = async () => {
-      const data = collection(db, "books");
-
       if (user?.uid) {
-        const q = query(data, where("uid", "==", user?.uid));
-        const bookArray: BookType[] = [];
-        var index = 0;
+        console.log("We have a user");
+        const q = query(
+          collection(db, "books"),
+          where("uid", "==", user?.uid),
+          orderBy("dateRead")
+        );
 
-        const querySnapshot = await getDocs(q);
-
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          const book: BookType = {
-            id: doc.id,
-            img: doc.data().img,
-            title: doc.data().title,
-            author: doc.data().author,
-            pageCount: doc.data().pageCount,
-            genre: doc.data().genre,
-            uid: doc.data().uid,
-          };
-          bookArray[index] = book;
-          index++;
-        });
-
-        setBooks(bookArray);
-      }
-
-      if (books.length === 0 && user === null) {
-        onSnapshot(data, async () => {
-          const theBooks = await getDocs(collection(db, "books"));
+        unsubscribe = onSnapshot(collection(db, "books"), async () => {
+          console.log("made it this far");
+          const theBooks = await getDocs(q);
+          console.log(theBooks);
           const temp: BookType[] = theBooks.docs.map((doc) => {
             const book: BookType = {
               id: doc.id,
@@ -77,10 +61,35 @@ function App() {
       if (user === null) {
         setBooks([]);
       }
-    };
 
+      if (books.length === 0 && !user?.uid) {
+        const unsubscribe = onSnapshot(collection(db, "books"), async () => {
+          const theBooks = await getDocs(collection(db, "books"));
+          const temp: BookType[] = theBooks.docs.map((doc) => {
+            const book: BookType = {
+              id: doc.id,
+              img: doc.data().img,
+              title: doc.data().title,
+              author: doc.data().author,
+              pageCount: doc.data().pageCount,
+              genre: doc.data().genre,
+              uid: doc.data().uid,
+            };
+            return book;
+          });
+          setBooks(temp);
+        });
+
+        unsubscribe();
+      }
+
+      if (user === null) {
+        setBooks([]);
+      }
+    };
     loadBooks();
-  }, [user, books.length, user?.uid]);
+    unsubscribe();
+  }, [user, books.length]);
 
   return (
     <>
