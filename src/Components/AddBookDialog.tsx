@@ -42,6 +42,7 @@ export function AddBookDialog(props: Props) {
       pageCount: pageCount,
       genre: genre,
       uid: props.user?.uid,
+      dateRead: new Date(),
     });
     onClose();
   };

@@ -40,6 +40,7 @@ export async function getBook(
     pageCount: returnBook.pageCount,
     genre: returnBook.genre,
     uid: user?.uid,
+    dateRead: new Date(),
   });
 
   return returnBook;
