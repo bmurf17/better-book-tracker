@@ -30,10 +30,6 @@ export function NavBar(props: Props) {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  if (user) {
-    console.log(user?.photoURL!);
-  }
-
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -142,6 +138,7 @@ export function NavBar(props: Props) {
               if (page === "Home") {
                 return (
                   <Link
+                    key={page}
                     to={"/"}
                     style={{
                       textDecoration: "none",
@@ -158,6 +155,7 @@ export function NavBar(props: Props) {
                 return (
                   <Link
                     to={"/" + page}
+                    key={page}
                     style={{
                       textDecoration: "none",
                       color: "white",
