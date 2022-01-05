@@ -6,4 +6,5 @@ export default interface BookType {
   pageCount: number;
   genre: string;
   uid: string;
+  dateRead: any;
 }

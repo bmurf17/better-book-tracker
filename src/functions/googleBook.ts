@@ -29,8 +29,16 @@ export async function getBook(
       returnBook.img = data.body.items[0].volumeInfo.imageLinks.thumbnail;
       returnBook.title = data.body.items[0].volumeInfo.title;
       returnBook.author = data.body.items[0]?.volumeInfo.authors[0];
-      returnBook.pageCount = data.body.items[0].volumeInfo.pageCount;
-      returnBook.genre = data.body.items[0].volumeInfo.categories[0];
+      if (data.body.items[0].volumeInfo.pageCount) {
+        returnBook.pageCount = data.body.items[0].volumeInfo.pageCount;
+      } else {
+        returnBook.pageCount = "0";
+      }
+      if (data.body.items[0]?.volumeInfo?.categories) {
+        returnBook.genre = data.body.items[0]?.volumeInfo?.categories[0];
+      } else {
+        returnBook.genre = "Undefined";
+      }
     });
 
   await addDoc(booksCollectionRef, {

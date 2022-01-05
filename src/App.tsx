@@ -31,15 +31,13 @@ function App() {
     var unsubscribe = () => {};
     const loadBooks = async () => {
       if (user?.uid) {
-        console.log("We have a user");
         const q = query(
           collection(db, "books"),
           where("uid", "==", user?.uid),
           orderBy("dateRead")
         );
 
-        unsubscribe = onSnapshot(collection(db, "books"), async () => {
-          console.log("made it this far");
+        onSnapshot(collection(db, "books"), async () => {
           const theBooks = await getDocs(q);
           console.log(theBooks);
           const temp: BookType[] = theBooks.docs.map((doc) => {
@@ -51,6 +49,7 @@ function App() {
               pageCount: doc.data().pageCount,
               genre: doc.data().genre,
               uid: doc.data().uid,
+              dateRead: doc.data().dateRead,
             };
             return book;
           });
@@ -63,7 +62,7 @@ function App() {
       }
 
       if (books.length === 0 && !user?.uid) {
-        const unsubscribe = onSnapshot(collection(db, "books"), async () => {
+        onSnapshot(collection(db, "books"), async () => {
           const theBooks = await getDocs(collection(db, "books"));
           const temp: BookType[] = theBooks.docs.map((doc) => {
             const book: BookType = {
@@ -74,13 +73,12 @@ function App() {
               pageCount: doc.data().pageCount,
               genre: doc.data().genre,
               uid: doc.data().uid,
+              dateRead: doc.data().dateRead,
             };
             return book;
           });
           setBooks(temp);
         });
-
-        unsubscribe();
       }
 
       if (user === null) {
@@ -110,7 +108,7 @@ function App() {
         </Routes>
 
         <Routes>
-          <Route path="/" element={<Home user={user} />} />
+          <Route path="/" element={<Home user={user} books={books} />} />
         </Routes>
       </BrowserRouter>
     </>
