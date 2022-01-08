@@ -51,20 +51,24 @@ export function Home(props: Props) {
       {
         label: "Page Count",
         data: bookCountArray,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
       },
     ],
   };
 
   return (
-    <div className="App-header">
+    <div className="App-background">
       {userName ? (
         <>
-          <Typography variant="h5">Welcome {userName}</Typography>
-          <Container maxWidth="lg">
-            {books.length > 0 ? <Line options={options} data={data} /> : null}
-          </Container>
+          <div className="App-welcome">
+            <Typography variant="h5">Welcome {userName}</Typography>
+          </div>
+          {books.length > 0 ? (
+            <Container maxWidth="lg">
+              <Line options={options} data={data} />
+            </Container>
+          ) : null}
         </>
       ) : (
         <Link
