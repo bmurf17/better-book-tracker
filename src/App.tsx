@@ -39,7 +39,6 @@ function App() {
 
         onSnapshot(collection(db, "books"), async () => {
           const theBooks = await getDocs(q);
-          console.log(theBooks);
           const temp: BookType[] = theBooks.docs.map((doc) => {
             const book: BookType = {
               id: doc.id,
@@ -98,16 +97,12 @@ function App() {
             path="/login"
             element={<Login user={user} setUser={setUser} />}
           />
-        </Routes>
 
-        <Routes>
           <Route
             path="/books"
             element={<MyBooks books={books} user={user} />}
           />
-        </Routes>
 
-        <Routes>
           <Route path="/" element={<Home user={user} books={books} />} />
         </Routes>
       </BrowserRouter>
