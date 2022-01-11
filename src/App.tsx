@@ -17,6 +17,7 @@ import {
 import { Home } from "./Components/Home";
 import { NavBar } from "./Components/NavBar";
 import { onAuthStateChanged, User } from "firebase/auth";
+import { FriendsList } from "./Components/FriendsList";
 
 function App() {
   const [books, setBooks] = useState<BookType[]>([]);
@@ -102,6 +103,8 @@ function App() {
             path="/books"
             element={<MyBooks books={books} user={user} />}
           />
+
+          <Route path="/friends" element={<FriendsList user={user} />} />
 
           <Route path="/" element={<Home user={user} books={books} />} />
         </Routes>

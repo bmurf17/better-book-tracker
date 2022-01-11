@@ -21,7 +21,7 @@ interface Props {
   user: User | null;
 }
 
-const pages = ["Home", "Books"];
+const pages = ["Home", "Books", "Friends"];
 const logoutLinks = ["Logout"];
 const logInLinks = ["Login"];
 

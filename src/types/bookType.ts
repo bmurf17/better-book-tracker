@@ -14,5 +14,5 @@ export interface SiteUser {
   name: string;
   profileImg: string;
   friends: any[];
-  dateCreated: Date;
+  dateCreated?: Date;
 }
