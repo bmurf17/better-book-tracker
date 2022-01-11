@@ -8,3 +8,11 @@ export default interface BookType {
   uid: string;
   dateRead: any;
 }
+
+export interface SiteUser {
+  uid: string;
+  name: string;
+  profileImg: string;
+  friends: any[];
+  dateCreated: Date;
+}

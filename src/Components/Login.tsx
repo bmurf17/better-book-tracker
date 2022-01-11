@@ -8,7 +8,9 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import "./MyBooks.css";
-import { auth, provider } from "./../firebase.config";
+import { auth, db, provider } from "./../firebase.config";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { SiteUser } from "../types/bookType";
 
 interface Props {
   user: User | null;
@@ -25,10 +27,34 @@ export function Login(props: Props) {
 
   const signInWithGoogle = async () => {
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
         // The signed-in user info.
         const user = result.user;
-        console.log(user);
+
+        const usersCollectionRef = collection(db, "users");
+
+        const q = query(usersCollectionRef, where("uid", "==", user?.uid));
+
+        const querySnapshot = await getDocs(q);
+
+        console.log(querySnapshot.size);
+
+        if (querySnapshot.size === 0) {
+          const theUser: SiteUser = {
+            uid: user.uid,
+            name: user.displayName || "",
+            profileImg: user.photoURL || "",
+            friends: [],
+            dateCreated: new Date(),
+          };
+
+          const createUser = async () => {
+            await addDoc(usersCollectionRef, theUser);
+          };
+
+          createUser();
+        }
+
         // ...
       })
       .catch((error) => {
