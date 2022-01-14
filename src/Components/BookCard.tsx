@@ -6,6 +6,7 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import Rating from "@material-ui/lab/Rating";
 import { useState } from "react";
 import BookType from "../types/bookType";
 import { BookDialog } from "./BookDialog";
@@ -21,8 +22,7 @@ export function BookCard(props: Props) {
   const img = props.book.img;
   const title = props.book.title;
   const author = props.book.author;
-  const pageCount = props.book.pageCount;
-  const genre = props.book.genre;
+  const rating = props.book.rating;
 
   const onOpen = () => {
     setOpen(true);
@@ -45,17 +45,12 @@ export function BookCard(props: Props) {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  Book Title: {title}
+                  {title}
                 </Typography>
                 <Typography gutterBottom variant="body1">
-                  Book Author: {author}
+                  By: {author}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Page Count: {pageCount}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Genre: {genre}
-                </Typography>
+                <Rating value={rating} readOnly precision={0.5} />
               </CardContent>
             </CardActionArea>
           </Card>

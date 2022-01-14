@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -17,6 +17,7 @@ import { Delete } from "@mui/icons-material";
 import "./MyBooks.css";
 import { db } from "../firebase.config";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import Rating from "@material-ui/lab/Rating";
 
 interface Props {
   open: boolean;
@@ -30,6 +31,7 @@ export function BookDialog(props: Props) {
   const [author, setAuthor] = useState(book.author);
   const [pageCount, setPageCount] = useState(book.pageCount);
   const [genre, setGenre] = useState(book.genre);
+  const [rating, setRating] = useState(book.rating);
 
   const handleDelete = async () => {
     const userDoc = doc(db, "books", book.id);
@@ -49,6 +51,16 @@ export function BookDialog(props: Props) {
     await updateDoc(userDoc, newFields);
 
     onClose();
+  };
+
+  const changeRating = async (newValue: number) => {
+    const userDoc = doc(db, "books", book.id);
+
+    await updateDoc(userDoc, {
+      rating: newValue,
+    });
+
+    setRating(newValue);
   };
 
   return (
@@ -188,6 +200,25 @@ export function BookDialog(props: Props) {
                   defaultValue={genre}
                   onChange={(e) => {
                     setGenre(e.target.value);
+                  }}
+                />
+              </Box>
+              <Box
+                display="flex"
+                style={{
+                  paddingTop: 6,
+                  paddingBottom: 6,
+                  paddingLeft: 12,
+                }}
+              >
+                <Rating
+                  value={rating}
+                  name={"Rating"}
+                  precision={0.5}
+                  onChange={(event, newValue) => {
+                    if (newValue) {
+                      changeRating(newValue);
+                    }
                   }}
                 />
               </Box>

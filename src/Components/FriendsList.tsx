@@ -1,12 +1,14 @@
-import { User } from "firebase/auth";
 import {
-  query,
-  collection,
-  where,
-  getDocs,
-  onSnapshot,
-  QuerySnapshot,
-} from "firebase/firestore";
+  Avatar,
+  Container,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  Typography,
+} from "@mui/material";
+import { User } from "firebase/auth";
+import { query, collection, where, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase.config";
 import { SiteUser } from "../types/bookType";
@@ -28,7 +30,7 @@ export function FriendsList(props: Props) {
 
         const querySnapshot = await getDocs(q);
 
-        const temp = querySnapshot.docs.map(async (doc) => {
+        querySnapshot.docs.map(async (doc) => {
           const q2 = query(
             usersCollectionRef,
             where("uid", "==", doc.data().friends[0])
@@ -55,15 +57,32 @@ export function FriendsList(props: Props) {
   }, [user]);
 
   return (
-    <>
-      {friends.map((friend) => {
-        return (
-          <>
-            <p>{friend.name}</p>
-            <p>Date Joined{friend.dateCreated}</p>
-          </>
-        );
-      })}
-    </>
+    <div className="App-background">
+      <Container maxWidth="lg" sx={{ paddingTop: 2 }}>
+        <List
+          dense
+          sx={{ width: "100%", bgcolor: "background.paper", paddingTop: 2 }}
+        >
+          {friends.map((friend) => {
+            return (
+              <ListItem key={friend.uid} disablePadding>
+                <ListItemButton>
+                  <ListItemAvatar>
+                    <Avatar
+                      sx={{ width: 56, height: 56 }}
+                      alt={`Avatar n°${friend.uid + 1}`}
+                      src={friend.profileImg}
+                    />
+                  </ListItemAvatar>
+                  <Typography sx={{ paddingLeft: 2 }}>
+                    {friend.name}{" "}
+                  </Typography>
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
+        </List>
+      </Container>
+    </div>
   );
 }

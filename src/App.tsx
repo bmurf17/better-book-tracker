@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import "./App.css";
 import BookType from "./types/bookType";
@@ -38,7 +37,7 @@ function App() {
           orderBy("dateRead")
         );
 
-        onSnapshot(collection(db, "books"), async () => {
+        unsubscribe = onSnapshot(collection(db, "books"), async () => {
           const theBooks = await getDocs(q);
           const temp: BookType[] = theBooks.docs.map((doc) => {
             const book: BookType = {
@@ -50,6 +49,7 @@ function App() {
               genre: doc.data().genre,
               uid: doc.data().uid,
               dateRead: doc.data().dateRead,
+              rating: doc.data().rating,
             };
             return book;
           });
@@ -62,7 +62,7 @@ function App() {
       }
 
       if (books.length === 0 && !user?.uid) {
-        onSnapshot(collection(db, "books"), async () => {
+        unsubscribe = onSnapshot(collection(db, "books"), async () => {
           const theBooks = await getDocs(collection(db, "books"));
           const temp: BookType[] = theBooks.docs.map((doc) => {
             const book: BookType = {
@@ -74,6 +74,7 @@ function App() {
               genre: doc.data().genre,
               uid: doc.data().uid,
               dateRead: doc.data().dateRead,
+              rating: doc.data().rating,
             };
             return book;
           });

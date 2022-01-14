@@ -7,6 +7,7 @@ export default interface BookType {
   genre: string;
   uid: string;
   dateRead: any;
+  rating: number;
 }
 
 export interface SiteUser {

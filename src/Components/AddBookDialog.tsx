@@ -31,7 +31,9 @@ export function AddBookDialog(props: Props) {
   const [author, setAuthor] = useState("");
   const [pageCount, setPageCount] = useState(0);
   const [genre, setGenre] = useState("");
-  const img = "https://m.media-amazon.com/images/I/618Duj4AwNL._SL1500_.jpg";
+  const [img, setImg] = useState(
+    "https://m.media-amazon.com/images/I/618Duj4AwNL._SL1500_.jpg"
+  );
   const booksCollectionRef = collection(db, "books");
 
   const createBook = async () => {
@@ -123,12 +125,7 @@ export function AddBookDialog(props: Props) {
                 >
                   {"Author: "}
                 </Typography>
-                <TextField
-                  defaultValue={author}
-                  onChange={(e) => {
-                    setAuthor(e.target.value);
-                  }}
-                />
+                <Typography>{author}</Typography>
               </Box>
               <Box
                 display="flex"
@@ -149,12 +146,7 @@ export function AddBookDialog(props: Props) {
                 >
                   {" Page Count: "}
                 </Typography>
-                <TextField
-                  defaultValue={pageCount}
-                  onChange={(e) => {
-                    setPageCount(Number(e.target.value));
-                  }}
-                />
+                <Typography>{pageCount}</Typography>
               </Box>
               <Box
                 display="flex"
@@ -175,13 +167,7 @@ export function AddBookDialog(props: Props) {
                 >
                   {" Genre: "}
                 </Typography>
-                <TextField
-                  style={{ paddingRight: 80 }}
-                  defaultValue={genre}
-                  onChange={(e) => {
-                    setGenre(e.target.value);
-                  }}
-                />
+                <Typography style={{ paddingRight: 80 }}>{genre}</Typography>
               </Box>
               <Box
                 display="flex"
@@ -200,8 +186,12 @@ export function AddBookDialog(props: Props) {
                   }}
                   startIcon={<SyncAltIcon />}
                   onClick={async () => {
-                    await getBook(title, author, props.user);
-                    onClose();
+                    const returnBook = await getBook(title, author, props.user);
+                    setTitle(returnBook.title);
+                    setPageCount(+returnBook.pageCount);
+                    setAuthor(returnBook.author);
+                    setGenre(returnBook.genre);
+                    setImg(returnBook.img);
                   }}
                 >
                   Fill Info

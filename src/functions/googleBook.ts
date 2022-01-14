@@ -1,6 +1,4 @@
 import { User } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "../firebase.config";
 const request = require("superagent");
 
 export async function getBook(
@@ -8,8 +6,6 @@ export async function getBook(
   author: string,
   user: User | null
 ) {
-  const booksCollectionRef = collection(db, "books");
-
   const returnBook = {
     img: "",
     title: "",
@@ -40,16 +36,6 @@ export async function getBook(
         returnBook.genre = "Undefined";
       }
     });
-
-  await addDoc(booksCollectionRef, {
-    img: returnBook.img,
-    title: returnBook.title,
-    author: returnBook.author,
-    pageCount: returnBook.pageCount,
-    genre: returnBook.genre,
-    uid: user?.uid,
-    dateRead: new Date(),
-  });
 
   return returnBook;
 }
