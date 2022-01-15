@@ -26,7 +26,7 @@ interface Props {
 }
 
 export function AddBookDialog(props: Props) {
-  const { open, onClose } = props;
+  const { open, onClose, user } = props;
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [pageCount, setPageCount] = useState(0);
@@ -43,7 +43,7 @@ export function AddBookDialog(props: Props) {
       author: author,
       pageCount: pageCount,
       genre: genre,
-      uid: props.user?.uid,
+      uid: user?.uid,
       dateRead: new Date(),
     });
     onClose();
@@ -186,7 +186,7 @@ export function AddBookDialog(props: Props) {
                   }}
                   startIcon={<SyncAltIcon />}
                   onClick={async () => {
-                    const returnBook = await getBook(title, author, props.user);
+                    const returnBook = await getBook(title, author, user);
                     setTitle(returnBook.title);
                     setPageCount(+returnBook.pageCount);
                     setAuthor(returnBook.author);

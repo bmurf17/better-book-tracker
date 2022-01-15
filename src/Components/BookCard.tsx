@@ -19,10 +19,12 @@ interface Props {
 export function BookCard(props: Props) {
   const [open, setOpen] = useState(false);
 
-  const img = props.book.img;
-  const title = props.book.title;
-  const author = props.book.author;
-  const rating = props.book.rating;
+  const { book } = props;
+
+  const img = book.img;
+  const title = book.title;
+  const author = book.author;
+  const rating = book.rating;
 
   const onOpen = () => {
     setOpen(true);
@@ -57,7 +59,7 @@ export function BookCard(props: Props) {
         </div>
       </Grid>
 
-      <BookDialog open={open} onClose={onClose} book={props.book} />
+      <BookDialog open={open} onClose={onClose} book={book} />
     </>
   );
 }

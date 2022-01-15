@@ -18,8 +18,7 @@ interface Props {
 }
 
 export function Login(props: Props) {
-  const user = props.user;
-  const setUser = props.setUser;
+  const { user, setUser } = props;
 
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);

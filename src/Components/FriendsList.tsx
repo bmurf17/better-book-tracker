@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function FriendsList(props: Props) {
-  const user = props.user;
+  const { user } = props;
   const [friends, setFriends] = useState<SiteUser[]>([]);
 
   useEffect(() => {

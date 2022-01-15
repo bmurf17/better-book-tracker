@@ -16,6 +16,8 @@ interface Props {
 }
 
 export function AddBookCard(props: Props) {
+  const { user } = props;
+
   const [open, setOpen] = useState(false);
 
   const onOpen = () => {
@@ -53,7 +55,7 @@ export function AddBookCard(props: Props) {
         </div>
       </Grid>
 
-      <AddBookDialog open={open} onClose={onClose} user={props.user} />
+      <AddBookDialog open={open} onClose={onClose} user={user} />
     </>
   );
 }

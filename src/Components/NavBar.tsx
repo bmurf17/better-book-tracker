@@ -26,7 +26,7 @@ const logoutLinks = ["Logout"];
 const logInLinks = ["Login"];
 
 export function NavBar(props: Props) {
-  const user = props.user;
+  const { user } = props;
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 

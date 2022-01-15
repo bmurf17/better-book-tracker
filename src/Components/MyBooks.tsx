@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function MyBooks(props: Props) {
-  const user = props.user;
+  const { user } = props;
   return (
     <div className="App-background">
       {user ? (

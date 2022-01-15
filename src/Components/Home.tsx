@@ -12,8 +12,7 @@ interface Props {
 }
 
 export function Home(props: Props) {
-  const user = props.user;
-  const books = props.books;
+  const { user, books } = props;
 
   const userName = user?.displayName;
 
