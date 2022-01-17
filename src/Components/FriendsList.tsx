@@ -10,8 +10,10 @@ import {
 import { User } from "firebase/auth";
 import { query, collection, where, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { db } from "../firebase.config";
 import { SiteUser } from "../types/bookType";
+import { AddFriend } from "./AddFriend";
 
 interface Props {
   user: User | null;
@@ -63,22 +65,32 @@ export function FriendsList(props: Props) {
           dense
           sx={{ width: "100%", bgcolor: "background.paper", paddingTop: 2 }}
         >
+          <AddFriend />
           {friends.map((friend) => {
             return (
-              <ListItem key={friend.uid} disablePadding>
-                <ListItemButton>
-                  <ListItemAvatar>
-                    <Avatar
-                      sx={{ width: 56, height: 56 }}
-                      alt={`Avatar n°${friend.uid + 1}`}
-                      src={friend.profileImg}
-                    />
-                  </ListItemAvatar>
-                  <Typography sx={{ paddingLeft: 2 }}>
-                    {friend.name}{" "}
-                  </Typography>
-                </ListItemButton>
-              </ListItem>
+              <Link
+                to={"/Friends/" + friend.uid}
+                style={{
+                  textDecoration: "none",
+                  color: "black",
+                  padding: 12,
+                }}
+              >
+                <ListItem key={friend.uid} disablePadding>
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      <Avatar
+                        sx={{ width: 56, height: 56 }}
+                        alt={`Avatar n°${friend.uid + 1}`}
+                        src={friend.profileImg}
+                      />
+                    </ListItemAvatar>
+                    <Typography sx={{ paddingLeft: 2 }}>
+                      {friend.name}
+                    </Typography>
+                  </ListItemButton>
+                </ListItem>
+              </Link>
             );
           })}
         </List>

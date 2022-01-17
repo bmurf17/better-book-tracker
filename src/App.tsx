@@ -17,6 +17,7 @@ import { Home } from "./Components/Home";
 import { NavBar } from "./Components/NavBar";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { FriendsList } from "./Components/FriendsList";
+import { FriendBookList } from "./Components/FirendBookList";
 
 function App() {
   const [books, setBooks] = useState<BookType[]>([]);
@@ -28,7 +29,6 @@ function App() {
   });
 
   useEffect(() => {
-    var unsubscribe = () => {};
     const loadBooks = async () => {
       if (user?.uid) {
         const q = query(
@@ -37,7 +37,7 @@ function App() {
           orderBy("dateRead")
         );
 
-        unsubscribe = onSnapshot(collection(db, "books"), async () => {
+        onSnapshot(collection(db, "books"), async () => {
           const theBooks = await getDocs(q);
           const temp: BookType[] = theBooks.docs.map((doc) => {
             const book: BookType = {
@@ -62,7 +62,7 @@ function App() {
       }
 
       if (books.length === 0 && !user?.uid) {
-        unsubscribe = onSnapshot(collection(db, "books"), async () => {
+        onSnapshot(collection(db, "books"), async () => {
           const theBooks = await getDocs(collection(db, "books"));
           const temp: BookType[] = theBooks.docs.map((doc) => {
             const book: BookType = {
@@ -87,7 +87,6 @@ function App() {
       }
     };
     loadBooks();
-    unsubscribe();
   }, [user, books.length]);
 
   return (
@@ -106,6 +105,8 @@ function App() {
           />
 
           <Route path="/friends" element={<FriendsList user={user} />} />
+
+          <Route path="/friends/:id" element={<FriendBookList />} />
 
           <Route path="/" element={<Home user={user} books={books} />} />
         </Routes>

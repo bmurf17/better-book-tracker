@@ -20,6 +20,10 @@
   padding-right: 16px;
 }
 
+.App-paddingLeft {
+  padding-left: 9px;
+}
+
 .App-welcome {
   display: flex;
   flex-direction: column;
