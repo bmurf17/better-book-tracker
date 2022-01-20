@@ -1,9 +1,19 @@
 import { ListItem, ListItemButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-export function AddFriend() {
+interface Props {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function AddFriend(props: Props) {
+  const { setOpen } = props;
   return (
-    <ListItem disablePadding>
+    <ListItem
+      disablePadding
+      onClick={() => {
+        setOpen(true);
+      }}
+    >
       <ListItemButton>
         <div className="App-paddingLeft">
           <AddIcon fontSize="large" />
