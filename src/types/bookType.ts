@@ -11,9 +11,10 @@ export default interface BookType {
 }
 
 export interface SiteUser {
+  id?: string;
   uid: string;
   name: string;
   profileImg: string;
-  friends: any[];
+  friends: string[];
   dateCreated?: Date;
 }

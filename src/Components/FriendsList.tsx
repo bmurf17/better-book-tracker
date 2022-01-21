@@ -7,7 +7,6 @@ import {
   ListItemButton,
   Typography,
 } from "@mui/material";
-import { User } from "firebase/auth";
 import { query, collection, where, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -17,53 +16,53 @@ import { AddFriend } from "./AddFriend";
 import { AddFriendDialog } from "./AddFriendDialog";
 
 interface Props {
-  user: User | null;
+  theUser: SiteUser | undefined;
 }
 
 export function FriendsList(props: Props) {
-  const { user } = props;
+  const { theUser } = props;
   const [friends, setFriends] = useState<SiteUser[]>([]);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const getCurrentUser = async () => {
-      if (user) {
+      if (theUser) {
         const usersCollectionRef = collection(db, "users");
 
-        const q = query(usersCollectionRef, where("uid", "==", user?.uid));
+        const q = query(usersCollectionRef, where("uid", "==", theUser?.uid));
 
+        //get the current user
         const querySnapshot = await getDocs(q);
 
-        querySnapshot.docs.map(async (doc) => {
-          if (doc?.data()?.friends[0]) {
-            const q2 = query(
-              usersCollectionRef,
-              where("uid", "==", doc.data().friends[0])
-            );
-            const theFriendData = await getDocs(q2);
+        const arrayOfFriendUids: string[] =
+          querySnapshot.docs[0].data().friends;
 
-            const friendList = theFriendData.docs.map((doc) => {
-              const theFriend: SiteUser = {
-                friends: doc.data().friends,
-                name: doc.data().name,
-                profileImg: doc.data().profileImg,
-                uid: doc.data().uid,
-              };
-              return theFriend;
-            });
-            setFriends(friendList);
-          }
-        });
+        const temp = await Promise.all(
+          arrayOfFriendUids.map(async (uid) => {
+            const q2 = query(usersCollectionRef, where("uid", "==", uid));
+            const querySnapshot2 = await getDocs(q2);
+            const data = querySnapshot2.docs[0].data();
+            const theFriend: SiteUser = {
+              name: data.name,
+              profileImg: data.profileImg,
+              friends: data.friends,
+              uid: data.uid,
+            };
+            console.log(theFriend);
+            return theFriend;
+          })
+        );
+
+        setFriends(temp);
       }
     };
-
     getCurrentUser();
-  }, [user]);
+  }, [theUser]);
 
   return (
     <div>
       <div className="App-background">
-        {user ? (
+        {theUser ? (
           <Container maxWidth="lg" sx={{ paddingTop: 2 }}>
             <List
               dense
@@ -85,7 +84,7 @@ export function FriendsList(props: Props) {
                         <ListItemAvatar>
                           <Avatar
                             sx={{ width: 56, height: 56 }}
-                            alt={`Avatar n°${friend.uid + 1}`}
+                            alt={`Avatar n°${friend.name + 1}`}
                             src={friend.profileImg}
                           />
                         </ListItemAvatar>
@@ -103,7 +102,7 @@ export function FriendsList(props: Props) {
           <p>Please login</p>
         )}
       </div>
-      <AddFriendDialog user={user} setOpen={setOpen} open={open} />
+      <AddFriendDialog theUser={theUser} setOpen={setOpen} open={open} />
     </div>
   );
 }

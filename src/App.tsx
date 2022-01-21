@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import BookType from "./types/bookType";
+import BookType, { SiteUser } from "./types/bookType";
 import { auth, db } from "./firebase.config";
 import { MyBooks } from "./Components/MyBooks";
 import { Login } from "./Components/Login";
@@ -21,8 +21,8 @@ import { FriendBookList } from "./Components/FirendBookList";
 
 function App() {
   const [books, setBooks] = useState<BookType[]>([]);
-
   const [user, setUser] = useState<User | null>(null);
+  const [theUser, setTheUser] = useState<SiteUser>();
 
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
@@ -57,10 +57,6 @@ function App() {
         });
       }
 
-      if (user === null) {
-        setBooks([]);
-      }
-
       if (books.length === 0 && !user?.uid) {
         onSnapshot(collection(db, "books"), async () => {
           const theBooks = await getDocs(collection(db, "books"));
@@ -86,6 +82,29 @@ function App() {
         setBooks([]);
       }
     };
+
+    const loadUser = async () => {
+      if (user) {
+        const usersCollectionRef = collection(db, "users");
+
+        const q = query(usersCollectionRef, where("uid", "==", user?.uid));
+
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.docs.map((doc) => {
+          const siteUser: SiteUser = {
+            id: doc.data().id,
+            friends: doc.data().friends,
+            name: doc.data().name,
+            profileImg: doc.data().profileImg,
+            uid: doc.data().uid,
+          };
+          return setTheUser(siteUser);
+        });
+      }
+    };
+
+    loadUser();
     loadBooks();
   }, [user, books.length]);
 
@@ -104,7 +123,7 @@ function App() {
             element={<MyBooks books={books} user={user} />}
           />
 
-          <Route path="/friends" element={<FriendsList user={user} />} />
+          <Route path="/friends" element={<FriendsList theUser={theUser} />} />
 
           <Route path="/friends/:id" element={<FriendBookList />} />
 
