@@ -1,5 +1,6 @@
 import {
   Avatar,
+  CircularProgress,
   Container,
   List,
   ListItem,
@@ -22,9 +23,11 @@ interface Props {
 export function FriendsList(props: Props) {
   const { theUser } = props;
   const [friends, setFriends] = useState<SiteUser[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const getCurrentUser = async () => {
       if (theUser) {
         const usersCollectionRef = collection(db, "users");
@@ -48,7 +51,6 @@ export function FriendsList(props: Props) {
               friends: data.friends,
               uid: data.uid,
             };
-            console.log(theFriend);
             return theFriend;
           })
         );
@@ -57,52 +59,67 @@ export function FriendsList(props: Props) {
       }
     };
     getCurrentUser();
-  }, [theUser]);
+    setLoading(false);
+  }, [theUser, loading]);
 
   return (
     <div>
-      <div className="App-background">
-        {theUser ? (
-          <Container maxWidth="lg" sx={{ paddingTop: 2 }}>
-            <List
-              dense
-              sx={{ width: "100%", bgcolor: "background.paper", paddingTop: 2 }}
-            >
-              <AddFriend setOpen={setOpen} />
-              {friends.map((friend) => {
-                return (
-                  <Link
-                    to={"/Friends/" + friend.uid}
-                    style={{
-                      textDecoration: "none",
-                      color: "black",
-                      padding: 12,
-                    }}
-                  >
-                    <ListItem key={friend.uid} disablePadding>
-                      <ListItemButton>
-                        <ListItemAvatar>
-                          <Avatar
-                            sx={{ width: 56, height: 56 }}
-                            alt={`Avatar n°${friend.name + 1}`}
-                            src={friend.profileImg}
-                          />
-                        </ListItemAvatar>
-                        <Typography sx={{ paddingLeft: 2 }}>
-                          {friend.name}
-                        </Typography>
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                );
-              })}
-            </List>
-          </Container>
-        ) : (
-          <p>Please login</p>
-        )}
-      </div>
-      <AddFriendDialog theUser={theUser} setOpen={setOpen} open={open} />
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <div className="App-background">
+          {theUser ? (
+            <Container maxWidth="lg" sx={{ paddingTop: 2 }}>
+              <List
+                dense
+                sx={{
+                  width: "100%",
+                  bgcolor: "background.paper",
+                  paddingTop: 2,
+                }}
+              >
+                <AddFriend setOpen={setOpen} />
+                {friends.map((friend) => {
+                  return (
+                    <Link
+                      to={"/Friends/" + friend.uid}
+                      style={{
+                        textDecoration: "none",
+                        color: "black",
+                        padding: 12,
+                      }}
+                    >
+                      <ListItem key={friend.uid} disablePadding>
+                        <ListItemButton>
+                          <ListItemAvatar>
+                            <Avatar
+                              sx={{ width: 56, height: 56 }}
+                              alt={`Avatar n°${friend.name + 1}`}
+                              src={friend.profileImg}
+                            />
+                          </ListItemAvatar>
+                          <Typography sx={{ paddingLeft: 2 }}>
+                            {friend.name}
+                          </Typography>
+                        </ListItemButton>
+                      </ListItem>
+                    </Link>
+                  );
+                })}
+              </List>
+            </Container>
+          ) : (
+            <p>Please login</p>
+          )}
+        </div>
+      )}
+
+      <AddFriendDialog
+        theUser={theUser}
+        setOpen={setOpen}
+        open={open}
+        setLoading={setLoading}
+      />
     </div>
   );
 }

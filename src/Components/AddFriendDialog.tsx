@@ -27,10 +27,12 @@ interface Props {
   theUser: SiteUser | undefined;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   open: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function AddFriendDialog(props: Props) {
-  const { theUser, setOpen, open } = props;
+  const { theUser, setOpen, open, setLoading } = props;
+
   const [possibleFriends, setPossibleFriends] = useState<SiteUser[]>([]);
 
   useEffect(() => {
@@ -41,13 +43,22 @@ export function AddFriendDialog(props: Props) {
 
       const querySnapshot = await getDocs(q);
       const friendList = querySnapshot.docs.map((doc) => {
-        const theFriend: SiteUser = {
-          id: doc.data().id,
-          friends: doc.data().friends,
-          name: doc.data().name,
-          profileImg: doc.data().profileImg,
-          uid: doc.data().uid,
+        let theFriend: SiteUser = {
+          id: "",
+          friends: [],
+          name: "",
+          profileImg: "",
+          uid: "",
         };
+        if (!theUser?.friends.includes(doc.data().uid)) {
+          theFriend = {
+            id: doc.data().id,
+            friends: doc.data().friends,
+            name: doc.data().name,
+            profileImg: doc.data().profileImg,
+            uid: doc.data().uid,
+          };
+        }
         return theFriend;
       });
       setPossibleFriends(friendList);
@@ -55,29 +66,27 @@ export function AddFriendDialog(props: Props) {
     if (theUser) {
       getCurrentUser();
     }
-  }, [theUser]);
+  }, [theUser, possibleFriends]);
 
   const onClose = () => {
     setOpen(false);
   };
 
   const addFriend = async (userID: string) => {
-    console.log(theUser?.friends);
-    console.log(userID);
-
+    setLoading(true);
     theUser?.friends.push(userID);
-
-    console.log(theUser?.friends);
 
     const newField = {
       friends: theUser?.friends,
     };
 
-    console.log("Here");
-    const userDoc = doc(db, "users", "nPiHryy4SrBVWS76PBBx");
+    const docID: string = theUser?.id as string;
+
+    const userDoc = doc(db, "users", docID);
 
     await updateDoc(userDoc, newField);
 
+    setLoading(false);
     onClose();
   };
 
@@ -102,31 +111,41 @@ export function AddFriendDialog(props: Props) {
       </DialogTitle>
       <DialogContent dividers>
         {possibleFriends.map((friend) => {
-          return (
-            <List
-              dense
-              sx={{ width: "100%", bgcolor: "background.paper", paddingTop: 2 }}
-            >
-              <ListItem
-                key={friend.uid}
-                disablePadding
-                onClick={() => {
-                  addFriend(friend.uid);
+          if (friend.id !== "") {
+            return (
+              <List
+                dense
+                sx={{
+                  width: "100%",
+                  bgcolor: "background.paper",
+                  paddingTop: 2,
                 }}
               >
-                <ListItemButton>
-                  <ListItemAvatar>
-                    <Avatar
-                      sx={{ width: 56, height: 56 }}
-                      alt={`Avatar n°${friend.uid + 1}`}
-                      src={friend.profileImg}
-                    />
-                  </ListItemAvatar>
-                  <Typography sx={{ paddingLeft: 2 }}>{friend.name}</Typography>
-                </ListItemButton>
-              </ListItem>
-            </List>
-          );
+                <ListItem
+                  key={friend.uid}
+                  disablePadding
+                  onClick={() => {
+                    addFriend(friend.uid);
+                  }}
+                >
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      <Avatar
+                        sx={{ width: 56, height: 56 }}
+                        alt={`Avatar n°${friend.uid + 1}`}
+                        src={friend.profileImg}
+                      />
+                    </ListItemAvatar>
+                    <Typography sx={{ paddingLeft: 2 }}>
+                      {friend.name}
+                    </Typography>
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            );
+          } else {
+            return null;
+          }
         })}
       </DialogContent>
     </Dialog>
