@@ -30,14 +30,15 @@ function App() {
 
   useEffect(() => {
     const loadBooks = async () => {
+      //only go if the user exist
       if (user?.uid) {
-        const q = query(
-          collection(db, "books"),
-          where("uid", "==", user?.uid),
-          orderBy("dateRead")
-        );
-
+        //go through all the books that match the current users UID
         onSnapshot(collection(db, "books"), async () => {
+          const q = query(
+            collection(db, "books"),
+            where("uid", "==", user?.uid),
+            orderBy("dateRead")
+          );
           const theBooks = await getDocs(q);
           const temp: BookType[] = theBooks.docs.map((doc) => {
             const book: BookType = {
@@ -56,44 +57,18 @@ function App() {
           setBooks(temp);
         });
       }
-
-      if (books.length === 0 && !user?.uid) {
-        onSnapshot(collection(db, "books"), async () => {
-          const theBooks = await getDocs(collection(db, "books"));
-          const temp: BookType[] = theBooks.docs.map((doc) => {
-            const book: BookType = {
-              id: doc.id,
-              img: doc.data().img,
-              title: doc.data().title,
-              author: doc.data().author,
-              pageCount: doc.data().pageCount,
-              genre: doc.data().genre,
-              uid: doc.data().uid,
-              dateRead: doc.data().dateRead,
-              rating: doc.data().rating,
-            };
-            return book;
-          });
-          setBooks(temp);
-        });
-      }
-
-      if (user === null) {
-        setBooks([]);
-      }
     };
 
     const loadUser = async () => {
       if (user) {
+        //get the user based on UID from firebase auth
         const usersCollectionRef = collection(db, "users");
-
         const q = query(usersCollectionRef, where("uid", "==", user?.uid));
-
         const querySnapshot = await getDocs(q);
 
         querySnapshot.docs.map((doc) => {
           const siteUser: SiteUser = {
-            id: doc.data().id,
+            id: doc.id,
             friends: doc.data().friends,
             name: doc.data().name,
             profileImg: doc.data().profileImg,
