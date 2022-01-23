@@ -110,6 +110,7 @@ function App() {
 
   return (
     <>
+      {/* Use site user not firebase user in everything (already done friends) */}
       <BrowserRouter>
         <NavBar user={user} />
         <Routes>
@@ -125,6 +126,7 @@ function App() {
 
           <Route path="/friends" element={<FriendsList theUser={theUser} />} />
 
+          {/* All refactors here are same as normal books, but could proabably find way to reduce code by resuing book displays code*/}
           <Route path="/friends/:id" element={<FriendBookList />} />
 
           <Route path="/" element={<Home user={user} books={books} />} />

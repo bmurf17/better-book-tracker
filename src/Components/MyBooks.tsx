@@ -13,6 +13,7 @@ interface Props {
 export function MyBooks(props: Props) {
   const { user } = props;
   return (
+    //might be able to move this div out to app.tsx
     <div className="App-background">
       {user ? (
         <Box sx={{ flexGrow: 1 }}>

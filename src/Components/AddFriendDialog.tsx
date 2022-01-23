@@ -36,13 +36,14 @@ export function AddFriendDialog(props: Props) {
   const [possibleFriends, setPossibleFriends] = useState<SiteUser[]>([]);
 
   useEffect(() => {
-    const getCurrentUser = async () => {
+    const getPossibleFriends = async () => {
       const usersCollectionRef = collection(db, "users");
 
       const q = query(usersCollectionRef, where("uid", "!=", theUser?.uid));
 
       const querySnapshot = await getDocs(q);
       const friendList = querySnapshot.docs.map((doc) => {
+        //might be able to remove setting it as an empty object. Just fear of it not being undefined
         let theFriend: SiteUser = {
           id: "",
           friends: [],
@@ -64,7 +65,7 @@ export function AddFriendDialog(props: Props) {
       setPossibleFriends(friendList);
     };
     if (theUser) {
-      getCurrentUser();
+      getPossibleFriends();
     }
   }, [theUser, possibleFriends]);
 
@@ -73,6 +74,7 @@ export function AddFriendDialog(props: Props) {
   };
 
   const addFriend = async (userID: string) => {
+    //need to keep the loading because this indicated to the the list to reload
     setLoading(true);
     theUser?.friends.push(userID);
 
@@ -111,6 +113,7 @@ export function AddFriendDialog(props: Props) {
       </DialogTitle>
       <DialogContent dividers>
         {possibleFriends.map((friend) => {
+          //this is the empty friend set above can remove if figure out that
           if (friend.id !== "") {
             return (
               <List

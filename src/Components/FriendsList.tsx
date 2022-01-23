@@ -40,7 +40,7 @@ export function FriendsList(props: Props) {
         const arrayOfFriendUids: string[] =
           querySnapshot.docs[0].data().friends;
 
-        const temp = await Promise.all(
+        const friendList = await Promise.all(
           arrayOfFriendUids.map(async (uid) => {
             const q2 = query(usersCollectionRef, where("uid", "==", uid));
             const querySnapshot2 = await getDocs(q2);
@@ -54,8 +54,7 @@ export function FriendsList(props: Props) {
             return theFriend;
           })
         );
-
-        setFriends(temp);
+        setFriends(friendList);
       }
     };
     getCurrentUser();

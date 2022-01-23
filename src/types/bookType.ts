@@ -10,6 +10,7 @@ export default interface BookType {
   rating: number;
 }
 
+//move out to own class
 export interface SiteUser {
   id?: string;
   uid: string;

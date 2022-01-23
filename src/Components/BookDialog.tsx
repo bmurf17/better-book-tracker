@@ -27,6 +27,7 @@ interface Props {
 
 export function BookDialog(props: Props) {
   const { open, onClose, book } = props;
+
   const [title, setTitle] = useState(book.title);
   const [author, setAuthor] = useState(book.author);
   const [pageCount, setPageCount] = useState(book.pageCount);
@@ -40,6 +41,7 @@ export function BookDialog(props: Props) {
   };
 
   const updateBook = async () => {
+    //TODO: Figure out how to upload an image to change it (not just the URL)
     const newFields = {
       title: title,
       author: author,

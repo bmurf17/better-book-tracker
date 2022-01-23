@@ -27,6 +27,7 @@ interface Props {
 
 export function AddBookDialog(props: Props) {
   const { open, onClose, user } = props;
+
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [pageCount, setPageCount] = useState(0);
@@ -34,9 +35,9 @@ export function AddBookDialog(props: Props) {
   const [img, setImg] = useState(
     "https://m.media-amazon.com/images/I/618Duj4AwNL._SL1500_.jpg"
   );
-  const booksCollectionRef = collection(db, "books");
 
   const createBook = async () => {
+    const booksCollectionRef = collection(db, "books");
     await addDoc(booksCollectionRef, {
       img: img,
       title: title,
@@ -50,6 +51,7 @@ export function AddBookDialog(props: Props) {
   };
 
   return (
+    //TODO: make smaller for when on mobile
     <Dialog open={open} maxWidth={"md"}>
       <DialogTitle sx={{ m: 0, p: 2 }}>
         {onClose ? (

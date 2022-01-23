@@ -56,6 +56,7 @@ export function Home(props: Props) {
     ],
   };
 
+  //TODO: Add reading goals/ Add some more data (might move data to different page)/ Feed friends Reading
   return (
     <div className="App-background">
       {userName ? (

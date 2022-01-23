@@ -20,10 +20,12 @@ interface Props {
 export function Login(props: Props) {
   const { user, setUser } = props;
 
+  //Might not need? This is probably handled in the same method in App.tsx
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
   });
 
+  //Very much based of firebase documentation
   const signInWithGoogle = async () => {
     signInWithPopup(auth, provider)
       .then(async (result) => {
@@ -36,8 +38,6 @@ export function Login(props: Props) {
 
         const querySnapshot = await getDocs(q);
 
-        console.log(querySnapshot.size);
-
         if (querySnapshot.size === 0) {
           const theUser: SiteUser = {
             uid: user.uid,
@@ -47,14 +47,8 @@ export function Login(props: Props) {
             dateCreated: new Date(),
           };
 
-          const createUser = async () => {
-            await addDoc(usersCollectionRef, theUser);
-          };
-
-          createUser();
+          await addDoc(usersCollectionRef, theUser);
         }
-
-        // ...
       })
       .catch((error) => {
         // Handle Errors here.
@@ -64,7 +58,6 @@ export function Login(props: Props) {
         const email = error.email;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
         console.log("Error Code: " + errorCode);
         console.log("Error Message: " + errorMessage);
         console.log("Email: " + email);
