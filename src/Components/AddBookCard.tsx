@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { AddBookDialog } from "./AddBookDialog";
 import {
   Card,
   CardActionArea,
@@ -8,8 +10,6 @@ import {
   Box,
 } from "@mui/material";
 import { User } from "firebase/auth";
-import { useState } from "react";
-import { AddBookDialog } from "./AddBookDialog";
 
 interface Props {
   user: User | null;
@@ -23,7 +23,6 @@ export function AddBookCard(props: Props) {
   const onOpen = () => {
     setOpen(true);
   };
-
   const onClose = () => {
     setOpen(false);
   };

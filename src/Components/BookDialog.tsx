@@ -1,4 +1,7 @@
 import { useState } from "react";
+import BookType from "../types/bookType";
+import { db } from "../firebase.config";
+import "./MyBooks.css";
 import {
   Dialog,
   DialogTitle,
@@ -12,10 +15,7 @@ import {
   TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import BookType from "../types/bookType";
 import { Delete } from "@mui/icons-material";
-import "./MyBooks.css";
-import { db } from "../firebase.config";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import Rating from "@material-ui/lab/Rating";
 

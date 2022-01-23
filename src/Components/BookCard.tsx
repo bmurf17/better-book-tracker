@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { BookDialog } from "./BookDialog";
+import BookType from "../types/bookType";
+import "./MyBooks.css";
 import {
   Grid,
   Card,
@@ -7,10 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import Rating from "@material-ui/lab/Rating";
-import { useState } from "react";
-import BookType from "../types/bookType";
-import { BookDialog } from "./BookDialog";
-import "./MyBooks.css";
 
 interface Props {
   book: BookType;

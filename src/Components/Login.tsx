@@ -1,4 +1,7 @@
 import React from "react";
+import { SiteUser } from "../types/bookType";
+import { auth, db, provider } from "./../firebase.config";
+import "./MyBooks.css";
 import { Typography, Button, Box } from "@material-ui/core";
 import GoogleIcon from "@mui/icons-material/Google";
 import {
@@ -7,10 +10,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-import "./MyBooks.css";
-import { auth, db, provider } from "./../firebase.config";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { SiteUser } from "../types/bookType";
 
 interface Props {
   user: User | null;

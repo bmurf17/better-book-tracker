@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
-import "./App.css";
-import BookType, { SiteUser } from "./types/bookType";
-import { auth, db } from "./firebase.config";
 import { MyBooks } from "./Components/MyBooks";
 import { Login } from "./Components/Login";
+import { Home } from "./Components/Home";
+import { NavBar } from "./Components/NavBar";
+import { FriendsList } from "./Components/FriendsList";
+import { FriendBookList } from "./Components/FirendBookList";
+import BookType, { SiteUser } from "./types/bookType";
+import { auth, db } from "./firebase.config";
+import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   collection,
@@ -13,11 +17,7 @@ import {
   where,
   orderBy,
 } from "firebase/firestore";
-import { Home } from "./Components/Home";
-import { NavBar } from "./Components/NavBar";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { FriendsList } from "./Components/FriendsList";
-import { FriendBookList } from "./Components/FirendBookList";
 
 function App() {
   const [books, setBooks] = useState<BookType[]>([]);

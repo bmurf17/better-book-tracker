@@ -1,3 +1,8 @@
+import { useEffect, useState } from "react";
+import { AddFriend } from "./AddFriend";
+import { AddFriendDialog } from "./AddFriendDialog";
+import { SiteUser } from "../types/bookType";
+import { db } from "../firebase.config";
 import {
   Avatar,
   CircularProgress,
@@ -9,12 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { query, collection, where, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { db } from "../firebase.config";
-import { SiteUser } from "../types/bookType";
-import { AddFriend } from "./AddFriend";
-import { AddFriendDialog } from "./AddFriendDialog";
 
 interface Props {
   theUser: SiteUser | undefined;

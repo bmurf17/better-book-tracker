@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { SiteUser } from "../types/bookType";
+import { db } from "../firebase.config";
 import {
   Dialog,
   DialogTitle,
@@ -18,10 +21,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { useState, useEffect } from "react";
-import { db } from "../firebase.config";
 import CloseIcon from "@mui/icons-material/Close";
-import { SiteUser } from "../types/bookType";
 
 interface Props {
   theUser: SiteUser | undefined;
