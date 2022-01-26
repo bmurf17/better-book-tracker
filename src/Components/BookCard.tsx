@@ -14,10 +14,11 @@ import Rating from "@material-ui/lab/Rating";
 
 interface Props {
   book: BookType;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function BookCard(props: Props) {
-  const { book } = props;
+  const { book, setLoading } = props;
 
   const [open, setOpen] = useState(false);
 
@@ -59,7 +60,12 @@ export function BookCard(props: Props) {
         </div>
       </Grid>
 
-      <BookDialog open={open} onClose={onClose} book={book} />
+      <BookDialog
+        open={open}
+        onClose={onClose}
+        book={book}
+        setLoading={setLoading}
+      />
     </>
   );
 }

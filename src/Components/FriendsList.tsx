@@ -24,11 +24,12 @@ export function FriendsList(props: Props) {
   const { theUser } = props;
   const [friends, setFriends] = useState<SiteUser[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [reload, setReload] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
     const getCurrentUser = async () => {
+      setLoading(true);
       if (theUser) {
         const usersCollectionRef = collection(db, "users");
 
@@ -56,10 +57,10 @@ export function FriendsList(props: Props) {
         );
         setFriends(friendList);
       }
+      setLoading(false);
     };
     getCurrentUser();
-    setLoading(false);
-  }, [theUser, loading]);
+  }, [theUser, reload]);
 
   return (
     <div>
@@ -117,7 +118,7 @@ export function FriendsList(props: Props) {
         theUser={theUser}
         setOpen={setOpen}
         open={open}
-        setLoading={setLoading}
+        setLoading={setReload}
       />
     </div>
   );

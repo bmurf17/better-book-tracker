@@ -13,10 +13,11 @@ import { User } from "firebase/auth";
 
 interface Props {
   user: User | null;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function AddBookCard(props: Props) {
-  const { user } = props;
+  const { user, setLoading } = props;
 
   const [open, setOpen] = useState(false);
 
@@ -54,7 +55,12 @@ export function AddBookCard(props: Props) {
         </div>
       </Grid>
 
-      <AddBookDialog open={open} onClose={onClose} user={user} />
+      <AddBookDialog
+        open={open}
+        onClose={onClose}
+        user={user}
+        setLoading={setLoading}
+      />
     </>
   );
 }

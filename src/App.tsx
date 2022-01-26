@@ -23,6 +23,7 @@ function App() {
   const [books, setBooks] = useState<BookType[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [theUser, setTheUser] = useState<SiteUser>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
@@ -81,7 +82,8 @@ function App() {
 
     loadUser();
     loadBooks();
-  }, [user, books.length]);
+    setLoading(false);
+  }, [user, books.length, loading]);
 
   return (
     <>
@@ -96,7 +98,14 @@ function App() {
 
           <Route
             path="/books"
-            element={<MyBooks books={books} user={user} />}
+            element={
+              <MyBooks
+                books={books}
+                user={user}
+                setLoading={setLoading}
+                loading={loading}
+              />
+            }
           />
 
           <Route path="/friends" element={<FriendsList theUser={theUser} />} />

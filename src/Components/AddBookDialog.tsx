@@ -23,10 +23,11 @@ interface Props {
   open: boolean;
   onClose: () => void;
   user: User | null;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function AddBookDialog(props: Props) {
-  const { open, onClose, user } = props;
+  const { open, onClose, user, setLoading } = props;
 
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -37,6 +38,7 @@ export function AddBookDialog(props: Props) {
   );
 
   const createBook = async () => {
+    setLoading(true);
     const booksCollectionRef = collection(db, "books");
     await addDoc(booksCollectionRef, {
       img: img,
