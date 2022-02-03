@@ -4,7 +4,7 @@ import { Login } from "./Components/Login";
 import { Home } from "./Components/Home";
 import { NavBar } from "./Components/NavBar";
 import { FriendsList } from "./Components/FriendsList";
-import { FriendBookList } from "./Components/FirendBookList";
+import { FriendBookList } from "./Components/FriendBookList";
 import BookType, { SiteUser } from "./types/bookType";
 import { auth, db } from "./firebase.config";
 import "./App.css";
