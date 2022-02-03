@@ -109,7 +109,20 @@ export function FriendsList(props: Props) {
               </List>
             </Container>
           ) : (
-            <p>Please login</p>
+            <div className="App-header">
+              <Link
+                to={"/login"}
+                style={{
+                  textDecoration: "none",
+                  color: "blue",
+                  padding: 12,
+                }}
+              >
+                <Typography variant="h3">
+                  Please Login To View Friends
+                </Typography>
+              </Link>
+            </div>
           )}
         </div>
       )}

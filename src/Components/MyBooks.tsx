@@ -4,6 +4,7 @@ import BookType from "../types/bookType";
 import "./MyBooks.css";
 import { Grid, Box, Typography, CircularProgress } from "@mui/material";
 import { User } from "firebase/auth";
+import { Link } from "react-router-dom";
 
 interface Props {
   books: BookType[];
@@ -34,7 +35,18 @@ export function MyBooks(props: Props) {
         </Box>
       ) : (
         <div className="App-header">
-          <Typography variant="h5">Sign in to create your book list</Typography>
+          <Link
+            to={"/login"}
+            style={{
+              textDecoration: "none",
+              color: "blue",
+              padding: 12,
+            }}
+          >
+            <Typography variant="h3">
+              Sign in to create your book list
+            </Typography>
+          </Link>
         </div>
       )}
     </div>

@@ -71,16 +71,18 @@ export function Home(props: Props) {
           ) : null}
         </>
       ) : (
-        <Link
-          to={"/login"}
-          style={{
-            textDecoration: "none",
-            color: "blue",
-            padding: 12,
-          }}
-        >
-          <Typography variant="h5">Please Sign In</Typography>
-        </Link>
+        <div className="App-header">
+          <Link
+            to={"/login"}
+            style={{
+              textDecoration: "none",
+              color: "blue",
+              padding: 12,
+            }}
+          >
+            <Typography variant="h3">Please Sign In</Typography>
+          </Link>
+        </div>
       )}
     </div>
   );
