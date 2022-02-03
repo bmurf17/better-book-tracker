@@ -18,6 +18,8 @@ import { addDoc, collection } from "firebase/firestore";
 import { getBook } from "../functions/googleBook";
 import SyncAltIcon from "@mui/icons-material/SyncAlt";
 import { User } from "firebase/auth";
+import { storage } from "../firebase.config";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 interface Props {
   open: boolean;
@@ -38,6 +40,25 @@ export function AddBookDialog(props: Props) {
   );
   const [editable, setEditable] = useState(true);
 
+  const handleChange = async (e: any) => {
+    if (e.target.files) {
+      const sotrageRef = ref(storage, `files/${e.target.files[0].name}`);
+      const uploadTask = uploadBytesResumable(sotrageRef, e.target.files[0]);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot: any) => {},
+        (error: any) => console.log(error),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            setImg(downloadURL);
+          });
+        }
+      );
+    }
+  };
+
   const createBook = async () => {
     setLoading(true);
     const booksCollectionRef = collection(db, "books");
@@ -54,7 +75,6 @@ export function AddBookDialog(props: Props) {
   };
 
   return (
-    //TODO: make smaller for when on mobile
     <Dialog open={open} maxWidth={"md"}>
       <DialogTitle sx={{ m: 0, p: 2 }}>
         {onClose ? (
@@ -75,13 +95,25 @@ export function AddBookDialog(props: Props) {
       <DialogContent dividers>
         <Grid style={{ paddingTop: 6, paddingBottom: 6 }} container>
           <Grid item>
-            <img
-              className="App-image"
-              src={img}
-              alt="Add a new book"
-              width="250"
-              height="350"
-            />
+            <Box display="flex">
+              <img
+                className="App-image"
+                src={img}
+                alt="Add a new book"
+                width="250"
+                height="350"
+              />
+            </Box>
+            <Box display="flex" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+              <Button
+                onChange={handleChange}
+                component="label"
+                variant="contained"
+              >
+                Upload An Image
+                <input type="file" hidden />
+              </Button>
+            </Box>
           </Grid>
           <Grid item xs={12} sm container>
             <Grid item xs container direction="column" spacing={2}>
