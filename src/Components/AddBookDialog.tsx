@@ -36,6 +36,7 @@ export function AddBookDialog(props: Props) {
   const [img, setImg] = useState(
     "https://m.media-amazon.com/images/I/618Duj4AwNL._SL1500_.jpg"
   );
+  const [editable, setEditable] = useState(true);
 
   const createBook = async () => {
     setLoading(true);
@@ -129,7 +130,16 @@ export function AddBookDialog(props: Props) {
                 >
                   {"Author: "}
                 </Typography>
-                <Typography>{author}</Typography>
+                {editable ? (
+                  <Typography>{author}</Typography>
+                ) : (
+                  <TextField
+                    defaultValue={author}
+                    onChange={(e) => {
+                      setAuthor(e.target.value);
+                    }}
+                  />
+                )}
               </Box>
               <Box
                 display="flex"
@@ -150,7 +160,16 @@ export function AddBookDialog(props: Props) {
                 >
                   {" Page Count: "}
                 </Typography>
-                <Typography>{pageCount}</Typography>
+                {editable ? (
+                  <Typography>{pageCount}</Typography>
+                ) : (
+                  <TextField
+                    defaultValue={pageCount}
+                    onChange={(e) => {
+                      setAuthor(e.target.value);
+                    }}
+                  />
+                )}
               </Box>
               <Box
                 display="flex"
@@ -171,7 +190,16 @@ export function AddBookDialog(props: Props) {
                 >
                   {" Genre: "}
                 </Typography>
-                <Typography style={{ paddingRight: 80 }}>{genre}</Typography>
+                {editable ? (
+                  <Typography>{genre}</Typography>
+                ) : (
+                  <TextField
+                    defaultValue={genre}
+                    onChange={(e) => {
+                      setAuthor(e.target.value);
+                    }}
+                  />
+                )}
               </Box>
               <Box
                 display="flex"
@@ -196,6 +224,7 @@ export function AddBookDialog(props: Props) {
                     setAuthor(returnBook.author);
                     setGenre(returnBook.genre);
                     setImg(returnBook.img);
+                    setEditable(false);
                   }}
                 >
                   Fill Info
