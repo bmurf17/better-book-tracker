@@ -6,12 +6,12 @@ import { NavBar } from "./Components/NavBar";
 import { FriendsList } from "./Components/FriendsList";
 import { FriendBookList } from "./Components/FriendBookList";
 import BookType, { SiteUser } from "./types/bookType";
-import { auth, db } from "./firebase.config";
+import { auth } from "./firebase.config";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { onAuthStateChanged, User } from "firebase/auth";
 import "./App.css";
 import loadBooks from "./functions/loadBooksDB";
+import loadUser from "./functions/LoadUser";
 
 function App() {
   const [books, setBooks] = useState<BookType[]>([]);
@@ -24,31 +24,12 @@ function App() {
   });
 
   useEffect(() => {
-    const loadUser = async () => {
-      if (user) {
-        //get the user based on UID from firebase auth
-        const usersCollectionRef = collection(db, "users");
-        const q = query(usersCollectionRef, where("uid", "==", user?.uid));
-        const querySnapshot = await getDocs(q);
-
-        querySnapshot.docs.map((doc) => {
-          const siteUser: SiteUser = {
-            id: doc.id,
-            friends: doc.data().friends,
-            name: doc.data().name,
-            profileImg: doc.data().profileImg,
-            uid: doc.data().uid,
-          };
-          return setTheUser(siteUser);
-        });
-      }
-    };
-
-    const temp = loadBooks(user?.uid || "", setBooks);
-    loadUser();
+    const unsubscribeBooks = loadBooks(user?.uid || "", setBooks);
+    const unsubscribeUser = loadUser(user?.uid || "", setTheUser);
 
     return () => {
-      temp();
+      unsubscribeBooks();
+      unsubscribeUser();
     };
   }, [user]);
 
@@ -76,7 +57,7 @@ function App() {
           <Route path="/friends" element={<FriendsList theUser={theUser} />} />
           {/* All refactors here are same as normal books, but could proabably find way to reduce code by resuing book displays code*/}
           <Route path="/friends/:id" element={<FriendBookList />} />
-          \
+
           <Route path="/" element={<Home user={user} books={books} />} />
         </Routes>
       </BrowserRouter>
