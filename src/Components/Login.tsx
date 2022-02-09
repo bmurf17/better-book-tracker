@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SiteUser } from "../types/bookType";
 import { auth, db, provider } from "./../firebase.config";
 import "./MyBooks.css";
@@ -20,18 +20,9 @@ interface Props {
 export function Login(props: Props) {
   const { user, setUser } = props;
 
-  //Might not need? This is probably handled in the same method in App.tsx
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-  });
-
-  //Very much based of firebase documentation
-  const signInWithGoogle = async () => {
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        // The signed-in user info.
-        const user = result.user;
-
+  useEffect(() => {
+    if (user) {
+      const addUserToDB = async () => {
         const usersCollectionRef = collection(db, "users");
 
         const q = query(usersCollectionRef, where("uid", "==", user?.uid));
@@ -49,6 +40,23 @@ export function Login(props: Props) {
 
           await addDoc(usersCollectionRef, theUser);
         }
+      };
+
+      addUserToDB();
+    }
+  }, [user]);
+
+  //Might not need? This is probably handled in the same method in App.tsx
+  onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+  });
+
+  //Very much based of firebase documentation
+  const signInWithGoogle = async () => {
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        // The signed-in user info.
+        setUser(result.user);
       })
       .catch((error) => {
         // Handle Errors here.
