@@ -9,7 +9,7 @@ import {
 import { db } from "../firebase.config";
 import BookType from "../types/bookType";
 
-export default async function loadBooks(
+export default function loadBooks(
   uid: string,
   setBooks: React.Dispatch<React.SetStateAction<BookType[]>>
 ) {
@@ -40,5 +40,5 @@ export default async function loadBooks(
     return temp;
   });
 
-  unsub();
+  return unsub;
 }

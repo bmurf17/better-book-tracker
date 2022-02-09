@@ -24,7 +24,6 @@ function App() {
   });
 
   useEffect(() => {
-    console.log("The top level useEffect is running");
     const loadUser = async () => {
       if (user) {
         //get the user based on UID from firebase auth
@@ -45,15 +44,11 @@ function App() {
       }
     };
 
-    const loadTheBooks = async () => {
-      await loadBooks(user?.uid || "", setBooks);
-    };
-
+    const temp = loadBooks(user?.uid || "", setBooks);
     loadUser();
-    loadTheBooks();
 
     return () => {
-      loadTheBooks();
+      temp();
     };
   }, [user]);
 
