@@ -60,7 +60,7 @@ export function AddBookDialog(props: Props) {
   };
 
   const createBook = async () => {
-    setLoading(true);
+    setLoading(false);
     const booksCollectionRef = collection(db, "books");
     await addDoc(booksCollectionRef, {
       img: img,
@@ -70,6 +70,7 @@ export function AddBookDialog(props: Props) {
       genre: genre,
       uid: user?.uid,
       dateRead: new Date(),
+      rating: 0,
     });
     onClose();
   };

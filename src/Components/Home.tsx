@@ -1,7 +1,7 @@
 import BookType from "../types/bookType";
 import "./MyBooks.css";
 import { User } from "firebase/auth";
-import { Container, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Line } from "react-chartjs-2";
 import moment from "moment";
@@ -64,11 +64,7 @@ export function Home(props: Props) {
           <div className="App-welcome">
             <Typography variant="h5">Welcome {userName}</Typography>
           </div>
-          {books.length > 0 ? (
-            <Container maxWidth="lg">
-              <Line options={options} data={data} />
-            </Container>
-          ) : null}
+          {books.length > 0 ? <Line options={options} data={data} /> : null}
         </>
       ) : (
         <div className="App-header">

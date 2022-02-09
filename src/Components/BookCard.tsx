@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function BookCard(props: Props) {
-  const { book, setLoading } = props;
+  const { book } = props;
 
   const [open, setOpen] = useState(false);
 
@@ -60,12 +60,7 @@ export function BookCard(props: Props) {
         </div>
       </Grid>
 
-      <BookDialog
-        open={open}
-        onClose={onClose}
-        book={book}
-        setLoading={setLoading}
-      />
+      <BookDialog open={open} onClose={onClose} book={book} />
     </>
   );
 }

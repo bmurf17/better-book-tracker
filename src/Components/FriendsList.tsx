@@ -63,7 +63,7 @@ export function FriendsList(props: Props) {
   }, [theUser, reload]);
 
   return (
-    <div>
+    <>
       {loading ? (
         <CircularProgress />
       ) : (
@@ -82,6 +82,7 @@ export function FriendsList(props: Props) {
                 {friends.map((friend) => {
                   return (
                     <Link
+                      key={friend.uid}
                       to={"/Friends/" + friend.uid}
                       style={{
                         textDecoration: "none",
@@ -133,6 +134,6 @@ export function FriendsList(props: Props) {
         open={open}
         setLoading={setReload}
       />
-    </div>
+    </>
   );
 }

@@ -23,11 +23,10 @@ interface Props {
   open: boolean;
   onClose: () => void;
   book: BookType;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function BookDialog(props: Props) {
-  const { open, onClose, book, setLoading } = props;
+  const { open, onClose, book } = props;
 
   const [title, setTitle] = useState(book.title);
   const [author, setAuthor] = useState(book.author);
@@ -42,8 +41,6 @@ export function BookDialog(props: Props) {
   };
 
   const updateBook = async () => {
-    //TODO: Figure out how to upload an image to change it (not just the URL)
-    setLoading(true);
     const newFields = {
       title: title,
       author: author,
@@ -58,7 +55,6 @@ export function BookDialog(props: Props) {
   };
 
   const changeRating = async (newValue: number) => {
-    setLoading(true);
     const userDoc = doc(db, "books", book.id);
 
     await updateDoc(userDoc, {
