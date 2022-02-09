@@ -7,17 +7,11 @@ import { FriendsList } from "./Components/FriendsList";
 import { FriendBookList } from "./Components/FriendBookList";
 import BookType, { SiteUser } from "./types/bookType";
 import { auth, db } from "./firebase.config";
-import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  query,
-  where,
-  orderBy,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { onAuthStateChanged, User } from "firebase/auth";
+import "./App.css";
+import loadBooks from "./functions/loadBooksDB";
 
 function App() {
   const [books, setBooks] = useState<BookType[]>([]);
@@ -30,36 +24,7 @@ function App() {
   });
 
   useEffect(() => {
-    const loadBooks = async () => {
-      //only go if the user exist
-      if (user?.uid) {
-        //go through all the books that match the current users UID
-        onSnapshot(collection(db, "books"), async () => {
-          const q = query(
-            collection(db, "books"),
-            where("uid", "==", user?.uid),
-            orderBy("dateRead")
-          );
-          const theBooks = await getDocs(q);
-          const temp: BookType[] = theBooks.docs.map((doc) => {
-            const book: BookType = {
-              id: doc.id,
-              img: doc.data().img,
-              title: doc.data().title,
-              author: doc.data().author,
-              pageCount: doc.data().pageCount,
-              genre: doc.data().genre,
-              uid: doc.data().uid,
-              dateRead: doc.data().dateRead,
-              rating: doc.data().rating,
-            };
-            return book;
-          });
-          setBooks(temp);
-        });
-      }
-    };
-
+    console.log("The top level useEffect is running");
     const loadUser = async () => {
       if (user) {
         //get the user based on UID from firebase auth
@@ -80,10 +45,17 @@ function App() {
       }
     };
 
+    const loadTheBooks = async () => {
+      await loadBooks(user?.uid || "", setBooks);
+    };
+
     loadUser();
-    loadBooks();
-    setLoading(false);
-  }, [user, books.length, loading]);
+    loadTheBooks();
+
+    return () => {
+      loadTheBooks();
+    };
+  }, [user]);
 
   return (
     <>
@@ -95,7 +67,6 @@ function App() {
             path="/login"
             element={<Login user={user} setUser={setUser} />}
           />
-
           <Route
             path="/books"
             element={
@@ -107,12 +78,10 @@ function App() {
               />
             }
           />
-
           <Route path="/friends" element={<FriendsList theUser={theUser} />} />
-
           {/* All refactors here are same as normal books, but could proabably find way to reduce code by resuing book displays code*/}
           <Route path="/friends/:id" element={<FriendBookList />} />
-
+          \
           <Route path="/" element={<Home user={user} books={books} />} />
         </Routes>
       </BrowserRouter>
