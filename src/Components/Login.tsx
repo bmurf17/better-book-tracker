@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { SiteUser } from "../types/bookType";
-import { auth, db, provider } from "./../firebase.config";
+import { auth, provider } from "./../firebase.config";
 import "./MyBooks.css";
 import { Typography, Button, Box } from "@material-ui/core";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -10,7 +9,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addUserToDB } from "../functions/LoadUser";
 
 interface Props {
   user: User | null;
@@ -21,29 +20,10 @@ export function Login(props: Props) {
   const { user, setUser } = props;
 
   useEffect(() => {
-    if (user) {
-      const addUserToDB = async () => {
-        const usersCollectionRef = collection(db, "users");
-
-        const q = query(usersCollectionRef, where("uid", "==", user?.uid));
-
-        const querySnapshot = await getDocs(q);
-
-        if (querySnapshot.size === 0) {
-          const theUser: SiteUser = {
-            uid: user.uid,
-            name: user.displayName || "",
-            profileImg: user.photoURL || "",
-            friends: [],
-            dateCreated: new Date(),
-          };
-
-          await addDoc(usersCollectionRef, theUser);
-        }
-      };
-
-      addUserToDB();
-    }
+    const unsub = addUserToDB(user);
+    return () => {
+      unsub();
+    };
   }, [user]);
 
   //Might not need? This is probably handled in the same method in App.tsx

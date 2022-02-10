@@ -13,15 +13,9 @@ import {
   ListItemButton,
   Typography,
 } from "@mui/material";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import CloseIcon from "@mui/icons-material/Close";
+import { loadPotentialFriends } from "../functions/LoadUser";
 
 interface Props {
   theUser: SiteUser | undefined;
@@ -36,37 +30,14 @@ export function AddFriendDialog(props: Props) {
   const [possibleFriends, setPossibleFriends] = useState<SiteUser[]>([]);
 
   useEffect(() => {
-    const getPossibleFriends = async () => {
-      const usersCollectionRef = collection(db, "users");
+    const unsub = loadPotentialFriends(
+      theUser || { id: "", friends: [], name: "", profileImg: "", uid: "" },
+      setPossibleFriends
+    );
 
-      const q = query(usersCollectionRef, where("uid", "!=", theUser?.uid));
-
-      const querySnapshot = await getDocs(q);
-      const friendList = querySnapshot.docs.map((doc) => {
-        //might be able to remove setting it as an empty object. Just fear of it not being undefined
-        let theFriend: SiteUser = {
-          id: "",
-          friends: [],
-          name: "",
-          profileImg: "",
-          uid: "",
-        };
-        if (!theUser?.friends.includes(doc.data().uid)) {
-          theFriend = {
-            id: doc.data().id,
-            friends: doc.data().friends,
-            name: doc.data().name,
-            profileImg: doc.data().profileImg,
-            uid: doc.data().uid,
-          };
-        }
-        return theFriend;
-      });
-      setPossibleFriends(friendList);
+    return () => {
+      unsub();
     };
-    if (theUser) {
-      getPossibleFriends();
-    }
   }, [theUser, possibleFriends]);
 
   const onClose = () => {

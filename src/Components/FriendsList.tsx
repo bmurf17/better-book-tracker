@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { AddFriend } from "./AddFriend";
 import { AddFriendDialog } from "./AddFriendDialog";
 import { SiteUser } from "../types/bookType";
-import { db } from "../firebase.config";
 import {
   Avatar,
   CircularProgress,
@@ -13,8 +12,8 @@ import {
   ListItemButton,
   Typography,
 } from "@mui/material";
-import { query, collection, where, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import { loadFriends } from "../functions/LoadUser";
 
 interface Props {
   theUser: SiteUser | undefined;
@@ -28,38 +27,16 @@ export function FriendsList(props: Props) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const getCurrentUser = async () => {
-      setLoading(true);
-      if (theUser) {
-        const usersCollectionRef = collection(db, "users");
+    setLoading(true);
+    const unsub = loadFriends(
+      theUser || { id: "", friends: [], name: "", profileImg: "", uid: "" },
+      setFriends
+    );
+    setLoading(false);
 
-        const q = query(usersCollectionRef, where("uid", "==", theUser?.uid));
-
-        //get the current user
-        const querySnapshot = await getDocs(q);
-
-        const arrayOfFriendUids: string[] =
-          querySnapshot.docs[0].data().friends;
-
-        const friendList = await Promise.all(
-          arrayOfFriendUids.map(async (uid) => {
-            const q2 = query(usersCollectionRef, where("uid", "==", uid));
-            const querySnapshot2 = await getDocs(q2);
-            const data = querySnapshot2.docs[0].data();
-            const theFriend: SiteUser = {
-              name: data.name,
-              profileImg: data.profileImg,
-              friends: data.friends,
-              uid: data.uid,
-            };
-            return theFriend;
-          })
-        );
-        setFriends(friendList);
-      }
-      setLoading(false);
+    return () => {
+      unsub();
     };
-    getCurrentUser();
   }, [theUser, reload]);
 
   return (
@@ -129,6 +106,7 @@ export function FriendsList(props: Props) {
       )}
 
       <AddFriendDialog
+        key={theUser?.uid}
         theUser={theUser}
         setOpen={setOpen}
         open={open}
