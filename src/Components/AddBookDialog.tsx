@@ -38,7 +38,6 @@ export function AddBookDialog(props: Props) {
   const [img, setImg] = useState(
     "https://m.media-amazon.com/images/I/618Duj4AwNL._SL1500_.jpg"
   );
-  const [editable, setEditable] = useState(true);
 
   const handleChange = async (e: any) => {
     if (e.target.files) {
@@ -51,7 +50,6 @@ export function AddBookDialog(props: Props) {
         (error: any) => console.log(error),
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("File available at", downloadURL);
             setImg(downloadURL);
           });
         }
@@ -161,18 +159,14 @@ export function AddBookDialog(props: Props) {
                   color="primary"
                   variant="h5"
                 >
-                  {"Author: "}
+                  {" Author: "}
                 </Typography>
-                {editable ? (
-                  <Typography>{author}</Typography>
-                ) : (
-                  <TextField
-                    defaultValue={author}
-                    onChange={(e) => {
-                      setAuthor(e.target.value);
-                    }}
-                  />
-                )}
+                <TextField
+                  value={author}
+                  onChange={(e) => {
+                    setAuthor(e.target.value);
+                  }}
+                />
               </Box>
               <Box
                 display="flex"
@@ -193,16 +187,13 @@ export function AddBookDialog(props: Props) {
                 >
                   {" Page Count: "}
                 </Typography>
-                {editable ? (
-                  <Typography>{pageCount}</Typography>
-                ) : (
-                  <TextField
-                    defaultValue={pageCount}
-                    onChange={(e) => {
-                      setAuthor(e.target.value);
-                    }}
-                  />
-                )}
+
+                <TextField
+                  value={pageCount}
+                  onChange={(e) => {
+                    setAuthor(e.target.value);
+                  }}
+                />
               </Box>
               <Box
                 display="flex"
@@ -223,16 +214,12 @@ export function AddBookDialog(props: Props) {
                 >
                   {" Genre: "}
                 </Typography>
-                {editable ? (
-                  <Typography>{genre}</Typography>
-                ) : (
-                  <TextField
-                    defaultValue={genre}
-                    onChange={(e) => {
-                      setAuthor(e.target.value);
-                    }}
-                  />
-                )}
+                <TextField
+                  value={genre}
+                  onChange={(e) => {
+                    setAuthor(e.target.value);
+                  }}
+                />
               </Box>
               <Box
                 display="flex"
@@ -257,7 +244,6 @@ export function AddBookDialog(props: Props) {
                     setAuthor(returnBook.author);
                     setGenre(returnBook.genre);
                     setImg(returnBook.img);
-                    setEditable(false);
                   }}
                 >
                   Fill Info
