@@ -101,25 +101,22 @@ export function loadFriends(
   return unsub;
 }
 
-export function addUserToDB(user: User | null) {
-  const unsub = onSnapshot(collection(db, "users"), async () => {
-    const usersCollectionRef = collection(db, "users");
+export async function addUserToDB(user: User | null) {
+  const usersCollectionRef = collection(db, "users");
 
-    const q = query(usersCollectionRef, where("uid", "==", user?.uid));
+  const q = query(usersCollectionRef, where("uid", "==", user?.uid));
 
-    const querySnapshot = await getDocs(q);
+  const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.size === 0) {
-      const theUser: SiteUser = {
-        uid: user?.uid || "",
-        name: user?.displayName || "",
-        profileImg: user?.photoURL || "",
-        friends: [],
-        dateCreated: new Date(),
-      };
+  if (querySnapshot.size === 0) {
+    const theUser: SiteUser = {
+      uid: user?.uid || "",
+      name: user?.displayName || "",
+      profileImg: user?.photoURL || "",
+      friends: [],
+      dateCreated: new Date(),
+    };
 
-      await addDoc(usersCollectionRef, theUser);
-    }
-  });
-  return unsub;
+    await addDoc(usersCollectionRef, theUser);
+  }
 }

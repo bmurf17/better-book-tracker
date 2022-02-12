@@ -20,10 +20,7 @@ export function Login(props: Props) {
   const { user, setUser } = props;
 
   useEffect(() => {
-    const unsub = addUserToDB(user);
-    return () => {
-      unsub();
-    };
+    addUserToDB(user);
   }, [user]);
 
   //Might not need? This is probably handled in the same method in App.tsx
